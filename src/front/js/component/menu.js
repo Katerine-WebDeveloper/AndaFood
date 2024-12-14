@@ -59,9 +59,9 @@ export const Menu = () => {
     return mostrarNotificacion();
   };
 
-  const decrecer = () => {};
+  const decrecer = () => { };
 
-  const acrecentar = () => {};
+  const acrecentar = () => { };
 
   useEffect(() => {
     actions.getMenu("Lunes");
@@ -95,7 +95,7 @@ export const Menu = () => {
             <i className="fa-solid fa-calendar-days"></i> MENÚ SEMANAL
           </h2>
           <div className="row">
-            {["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"].map((day) => (
+            {["Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado"].map((day) => (
               <div
                 key={day}
                 className="menudeldia2 mt-3"
@@ -109,7 +109,7 @@ export const Menu = () => {
               >
                 <h2 className="text-center" style={{ color: "rgb(56, 101, 229)" }}>{day}</h2>
                 <div className="row">
-                  {store[`menu${day}`]?.map((menu) => (
+                  {store[`menu${day}`] && store[`menu${day}`].map((menu) => (
                     <CardMenu key={menu.id} menu={menu} />
                   ))}
                 </div>

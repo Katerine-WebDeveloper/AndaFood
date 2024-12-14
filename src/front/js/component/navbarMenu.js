@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useContext, useActionState } from "react";
 import andalogofood from "../../img/anda.png";
-import { Context } from "../store/appContext";
 import userlogo from "../../img/user.webp";
 
 import { Link } from 'react-router-dom';
@@ -12,23 +11,19 @@ import { Context } from "../store/appContext";
 export const MenuNavbar = (props) => {
 
   const [spinner, setSpinner] = useState(false);
-
-
   const { actions, store } = useContext(Context)
-
   const navigate = useNavigate();
-
   const { listCart } = useContext(SelectedMenuData);
-
   const logout = () => {
-  localStorage.removeItem("access_token");
-  setStore({ user: null, token: null, auth: false });
-  console.log("Sesión cerrada");
-};
+    localStorage.removeItem("access_token");
+    setStore({ user: null, token: null, auth: false });
+    console.log("Sesión cerrada");
+  };
 
-const handleLogout = () => {
-  actions.logout();
-  navigate("/");
+  const handleLogout = () => {
+    actions.logout();
+    navigate("/");
+  }
 
   const handleCompra = async () => {
     if (listCart.length === 0) {
@@ -65,9 +60,13 @@ const handleLogout = () => {
                 <img className="rounded" src={userlogo} alt="Anda Food Logo" style={{ width: "80px", height: "80px", "borderRadius": "10px" }} />
               </div>
 
-              <h6 className="offcanvas-title text-center" id="offcanvasScrollingLabel">Nombre usuario: Katerine Céspedes</h6>
-              <h6 className="offcanvas-title text-center" id="offcanvasScrollingLabel">N° funcionario: 23456</h6>
-              <h6 className="offcanvas-title text-center" id="offcanvasScrollingLabel">Correo: katerine@4geeks.com</h6>
+              <h6 className="offcanvas-title text-center" id="offcanvasScrollingLabel">
+                Nombre usuario: {store.user && store.user.name || "Katerine"} {store.user && store.user.last_name || "Céspedes"}
+              </h6>
+              <h6 className="offcanvas-title text-center" id="offcanvasScrollingLabel">
+                N° funcionario: {store.user && store.user.num_funcionario}
+              </h6>
+              <h6 className="offcanvas-title text-center" id="offcanvasScrollingLabel">Correo: {store.user && store.user.email}</h6>
             </div>
 
             <button type="button" className="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
@@ -157,8 +156,8 @@ const handleLogout = () => {
 
             </div>
           </div>
-          </div>
-        
+        </div>
+
         {/* fin del offcanvas del logo de ig */}
 
 
@@ -306,5 +305,4 @@ const handleLogout = () => {
       </div>
     </nav>
   )
-};
 };

@@ -61,20 +61,20 @@ const getState = ({ getStore, getActions, setStore }) => {
 					}
 					setStore({ auth: false })
 					return {
-						status:false
+						status: false
 					}
 				} catch (error) {
 					console.log("Error loading message from backend", error)
 					setStore({ user: false })
 					return {
-						status:false
+						status: false
 					};
 				}
-			},logout: () => {
-                localStorage.removeItem("access_token");
-                setStore({ user: null, token: null, auth: false });
-                console.log("Sesión cerrada");
-            },
+			}, logout: () => {
+				localStorage.removeItem("access_token");
+				setStore({ user: null, token: null, auth: false });
+				console.log("Sesión cerrada");
+			},
 			signup: async (user) => {
 				try {
 					// fetching data from the backend
@@ -97,15 +97,18 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 
 			logout: () => {
-				
+
 				localStorage.removeItem("access_token");
-				setStore({ user: null, token: null, auth: false });			
+				setStore({ user: null, token: null, auth: false });
 				console.log("Sesión cerrada");
 			},
-			
+
 			getMenu: async (menuDay) => {
 				try {
 					const response = await fetch(process.env.BACKEND_URL + "api/menu/" + menuDay);
+					if (!response.ok) {
+						return
+					}
 					const data = await response.json();
 					console.log(data);
 					if (menuDay === "Lunes") {
@@ -167,13 +170,14 @@ const getState = ({ getStore, getActions, setStore }) => {
 					console.error("Error al obtener opciones:", error);
 				}
 			},
+			
 
 
 
 			guardarReserva: async (reservas) => {
 				try {
 					const token = localStorage.getItem("access_token");
-					const response = await fetch("https://refactored-trout-gwx9vg7ggj7c994r-3001.app.github.dev/api/reservations", {
+					const response = await fetch(process.env.BACKEND_URL + "api/reservations", {
 						method: "POST",
 						headers: {
 							"Content-Type": "application/json",
@@ -252,7 +256,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 
 			},
-			recuperarPassword: async (email,aleatorio,password) => {
+			recuperarPassword: async (email, aleatorio, password) => {
 				try {
 
 					const response = await fetch(process.env.BACKEND_URL + "api/recuperar-password", {
@@ -270,6 +274,34 @@ const getState = ({ getStore, getActions, setStore }) => {
 					}
 					if (response.status == 404) {
 						return false;
+					}
+				} catch (error) {
+					console.log(error);
+					return false;
+				}
+
+			},
+
+			getProfile: async () => {
+				try {
+					const token = localStorage.getItem("access_token");
+					if(!token){
+						return false
+					}
+					const response = await fetch(process.env.BACKEND_URL + "api/user/profile", {
+						method: "GET",
+						headers: {
+							"Content-Type": "application/json",
+							"Authorization": "Bearer " + token
+						},
+
+					});
+					console.log(response);
+					if (response.status == 200) {
+						const data = await response.json()
+						console.log(data)
+						setStore({ user: data });
+						return true;
 					}
 				} catch (error) {
 					console.log(error);

@@ -52,8 +52,24 @@ export const NewMenu = () => {
         });
     };
 
+    const addMenu = () => {
+        if (!currentMenu.day || !currentMenu.name || !currentMenu.description || !currentMenu.price || !currentMenu.image) {
+            alert("Por favor, complete todos los campos y suba una imagen.");
+            return;
+        }
+
+        setMenus([...menus, currentMenu]);
+        setCurrentMenu({
+            day: "",
+            name: "",
+            description: "",
+            price: "",
+            image: null,
+        });
+    };
+
     const removeMenu = (index) => {
-        setMenus((prev) => prev.filter((_, i) => i !== index));
+        setMenus( menus.filter((_, i) => i !== index));
     };
 
     const handlePublishAll = async () => {
