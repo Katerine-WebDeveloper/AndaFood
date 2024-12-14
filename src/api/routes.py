@@ -150,7 +150,7 @@ def handle_hello():
 @api.route('/menu', methods=['POST'])
 def create_menu():
     body = request.form
-    if not body or "day" not in body or "name" not in body or "description" not in body or "price" not in  body or "img" not in body:
+    if not body or "day" not in body or "name" not in body or "description" not in body or "price" not in  body:
         raise APIException("Missing name, price, description, or img", status_code=400)
     day = body.get("day")
     name = body.get("name")
@@ -330,6 +330,12 @@ def login():
     access_token = create_access_token(identity=email)
     return jsonify(access_token=access_token, user=user.serialize()),200
 
+@api.route('/user/profile', methods=['GET'])
+@jwt_required()
+def get_user_profile():
+    email = get_jwt_identity()
+    user = User.query.filter_by(email=email).first()
+    return jsonify(user.serialize()), 200
 
 @api.route("/protected", methods=["GET"])
 @jwt_required()
