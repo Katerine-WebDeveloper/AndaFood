@@ -120,7 +120,6 @@ export const NewOption = () => {
                                     id="inputimage"
                                     onChange={handleImageUpload}
                                 />
-                                <label className="input-group-text" htmlFor="inputimage">Subir Imagen</label>
                             </div>
                         )}
 
@@ -158,7 +157,7 @@ export const NewOption = () => {
                                 type="button"
                                 onClick={() => navigate("/admin")}
                             >
-                                Volver a Aministración de Comedor
+                              <i class="fa-solid fa-bowl-food"></i>  Volver a Aministración de Comedor
                             </button>
                         </div>
                     </form>

@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Navbar } from "../component/loginnavbar";
 import Swal from 'sweetalert2'
 
+
 export const NewMenu = () => {
     const [menus, setMenus] = useState([]);
     const [currentMenu, setCurrentMenu] = useState({
@@ -14,6 +15,8 @@ export const NewMenu = () => {
     });
 
     const navigate = useNavigate();
+
+
 
     const handleInputChange = (event) => {
         const { name, value } = event.target;
@@ -254,7 +257,7 @@ export const NewMenu = () => {
                                 type="button"
                                 onClick={() => navigate("/admin")}
                             >
-                                Volver a Aministración de Comedor
+                               <i class="fa-solid fa-bowl-food"></i> Volver a Aministración de Comedor
                             </button>
                         </div>
                     </div>
