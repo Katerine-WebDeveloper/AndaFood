@@ -26,7 +26,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			// Use getActions to call a function within a function
 			pagoMercadoPago: async (total) => {
 				try {
-					const response = await fetch("https://crispy-rotary-phone-x59p57vpggwjfv5x5-3001.app.github.dev/api/preference", {
+					const response = await fetch(process.env.BACKEND_URL + "api/preference", {
 						method: "POST",
 						headers: { "Content-Type": "application/json" },
 						body: JSON.stringify({ total: total })
