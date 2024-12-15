@@ -91,8 +91,17 @@ export const CardOption = ({ option }) => {
                 <i className="fa-solid fa-cart-shopping"></i>
               </button>
             </div>
+            
           </div>
-        
+        <div className="mt-3">
+                        <button
+                            className="btn btn-danger"
+                            type="button"
+                            onClick={() => navigate("/")}
+                        >
+                            Volver al Login
+                        </button>
+                    </div>
    
     </div>
     

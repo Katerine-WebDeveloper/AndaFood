@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Navbar } from "../component/loginnavbar";
+import Swal from 'sweetalert2'
 
 export const NewOption = () => {
     const [image, setImage] = useState(null);
@@ -38,101 +39,131 @@ export const NewOption = () => {
             });
 
             if (!resp.ok) {
-                alert('No se pudo publicar la opción. Intenta nuevamente.');
+                mensaje2('No se pudo publicar la opción. Intenta nuevamente.');
                 return;
             }
 
             const data = await resp.json();
             console.log(data);
-            alert('Opción publicada exitosamente.');
+            mensaje('Otra opción creada con éxito!');
 
-        
+
             navigate("/menu");
         } catch (error) {
             console.error("Error:", error);
-            alert("Hubo un error al publicar la opción.");
+            mensaje2("Hubo un error al publicar la opción.");
         }
     };
 
+     const mensaje = (titulo,icon="success" ,title="") => {
+            Swal.fire({
+                icon: icon,
+                title: title,
+                text: titulo,
+    
+            });
+        }
+        const mensaje2 = (titulo,icon="error" ,title="") => {
+            Swal.fire({
+                icon: icon,
+                title: title,
+                text: titulo,
+    
+            });
+        }
+
+
+
+
+
     return (
         <>
-        <Navbar/>
-       
-        <div className="d-flex justify-content-center align-items-center vh-100">
-            <div className="col-md-8 col-lg-6 order-md-1 bg-light p-4 rounded">
-                <h4 className="mt-5">Otras Opciónes</h4>
-                <form className="needs-validation" noValidate onSubmit={handlePublish}>
-                    <div className="mb-3">
-                        <label htmlFor="name">Opciónes</label>
-                        <input
-                            type="text"
-                            className="form-control"
-                            id="name"
-                            placeholder=""
-                            value={product.name}
-                            required
-                            onChange={(event) => setProduct({ ...product, name: event.target.value })}
-                        />
-                        <div className="invalid-feedback">El nombre es obligatorio.</div>
-                    </div>
+            <Navbar />
 
-                    <div className="mb-3">
-                        <label htmlFor="price">Precio</label>
-                        <input
-                            type="number"
-                            className="form-control"
-                            id="price"
-                            placeholder=""
-                            value={product.price}
-                            required
-                            onChange={(event) => setProduct({ ...product, price: event.target.value })}
-                        />
-                        <div className="invalid-feedback">El precio es obligatorio.</div>
-                    </div>
-
-                    {!image && (
-                        <div className="input-group mb-3">
+            <div className="d-flex justify-content-center align-items-center vh-100">
+                <div className="col-md-8 col-lg-6 order-md-1 bg-light p-4 rounded">
+                    <h4 className="mt-5">Otras Opciónes</h4>
+                    <form className="needs-validation" noValidate onSubmit={handlePublish}>
+                        <div className="mb-3">
+                            <label htmlFor="name">Opciónes</label>
                             <input
-                                type="file"
+                                type="text"
                                 className="form-control"
-                                id="inputimage"
-                                onChange={handleImageUpload}
+                                id="name"
+                                placeholder=""
+                                value={product.name}
+                                required
+                                onChange={(event) => setProduct({ ...product, name: event.target.value })}
                             />
-                            <label className="input-group-text" htmlFor="inputimage">Subir Imagen</label>
+                            <div className="invalid-feedback">El nombre es obligatorio.</div>
                         </div>
-                    )}
 
-                    {image && (
-                        <div className="col-12 my-2">
-                            <img
-                                src={URL.createObjectURL(image)}
-                                alt="Vista previa"
-                                className="img-thumbnail"
-                                style={{ maxWidth: "200px", maxHeight: "200px", objectFit: "cover" }}
+                        <div className="mb-3">
+                            <label htmlFor="price">Precio</label>
+                            <input
+                                type="number"
+                                className="form-control"
+                                id="price"
+                                placeholder=""
+                                value={product.price}
+                                required
+                                onChange={(event) => setProduct({ ...product, price: event.target.value })}
                             />
+                            <div className="invalid-feedback">El precio es obligatorio.</div>
                         </div>
-                    )}
 
-                    {image && (
-                        <div className="col-12 my-2">
+                        {!image && (
+                            <div className="input-group mb-3">
+                                <input
+                                    type="file"
+                                    className="form-control"
+                                    id="inputimage"
+                                    onChange={handleImageUpload}
+                                />
+                                <label className="input-group-text" htmlFor="inputimage">Subir Imagen</label>
+                            </div>
+                        )}
+
+                        {image && (
+                            <div className="col-12 my-2">
+                                <img
+                                    src={URL.createObjectURL(image)}
+                                    alt="Vista previa"
+                                    className="img-thumbnail"
+                                    style={{ maxWidth: "200px", maxHeight: "200px", objectFit: "cover" }}
+                                />
+                            </div>
+                        )}
+
+                        {image && (
+                            <div className="col-12 my-2">
+                                <button
+                                    className="btn btn-danger"
+                                    type="button"
+                                    onClick={() => setImage(null)}
+                                >
+                                    Borrar Imagen
+                                </button>
+                            </div>
+                        )}
+
+                        <div className="d-grid gap-2 mb-2">
+                            <button className="btn btn-primary" type="submit">
+                                Subir Menú
+                            </button>
+                        </div>
+                        <div className="mt-3">
                             <button
                                 className="btn btn-danger"
                                 type="button"
-                                onClick={() => setImage(null)}
+                                onClick={() => navigate("/admin")}
                             >
-                                Borrar Imagen
+                                Volver a Aministración de Comedor
                             </button>
                         </div>
-                    )}
-
-                    <div className="d-grid gap-2 mb-2">
-                        <button className="btn btn-primary" type="submit">
-                            Subir Menú
-                        </button>
-                    </div>
-                </form>
+                    </form>
+                </div>
             </div>
-        </div>
-    </>
+        </>
     );
 };

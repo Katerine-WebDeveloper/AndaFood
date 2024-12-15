@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext, useActionState } from "react";
-import andalogofood from "../../img/anda.png";
+import andalogofood from "../../img/anda.webp";
 import userlogo from "../../img/user.webp";
 
 import { Link } from 'react-router-dom';
