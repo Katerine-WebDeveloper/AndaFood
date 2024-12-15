@@ -51,7 +51,7 @@ export const MenuNavbar = (props) => {
         </div>
 
         {/* imagen user, perfil usuario */}
-        <div className="offcanvas offcanvas-start coloroffcanvas" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" id="offcanvasScrolling" aria-labelledby="offcanvasScrollingLabel">
+        <div className="offcanvas offcanvas-start coloroffcanvas" data-bs-scroll="true" data-bs-backdrop="false" tabIndex="-1" id="offcanvasScrolling" aria-labelledby="offcanvasScrollingLabel">
 
           <div className="offcanvas-header">
             <div className="d-flex flex-column mx-auto">
@@ -134,12 +134,12 @@ export const MenuNavbar = (props) => {
 
                   <Link to={"/reservations"} className="custom-link">
                     <div className="feedbacklink my-2">
-                      <i class="fa-solid fa-calendar-days me-2" style={{ color: "#ffffff;" }}></i> Reservar lugar</div>
+                      <i className="fa-solid fa-calendar-days me-2" style={{ color: "#ffffff" }}></i> Reservar lugar</div>
                   </Link>
 
                   <Link to={"/form"} className="custom-link customhover">
                     <div className="feedbacklink my-2">
-                      <i class="fa-solid fa-envelope me-2" style={{ color: "#ffffff;" }}></i>
+                      <i className="fa-solid fa-envelope me-2" style={{ color: "#ffffff" }}></i>
                       Déjanos tu comentario</div>
                   </Link>
                 </div>
