@@ -35,7 +35,7 @@ export const NewMenu = () => {
     });
 
     const handlePublish = async (event) => {
-        event.preventDefault(); // Prevenir la acción por defecto del formulario
+        event.preventDefault(); 
         console.log("Publish the new product", product, image);
 
         const formData = new FormData();
@@ -109,7 +109,18 @@ export const NewMenu = () => {
     return (
         <>
         <Navbar/>
-        <div className="d-flex justify-content-center align-items-center vh-100">
+        <div
+            className="d-flex justify-content-center align-items-center"
+            style={{
+                paddingTop: "150px", 
+                paddingBottom: "80px", 
+                minHeight: "100vh", 
+                overflowY: "auto",
+                padding: "20px",
+                boxSizing: "border-box",
+            
+            }}
+        >
             <div className="col-md-8 col-lg-6 order-md-1 bg-light p-4 rounded">
                 <h4 className="mt-5">MENÚ NUEVO</h4>
                 <form className="needs-validation" noValidate>
@@ -169,7 +180,7 @@ export const NewMenu = () => {
                             id="inputimage"
                             onChange={handleImageUpload}
                         />
-                        <label className="input-group-text" htmlFor="inputimage">Upload</label>
+                       
                     </div>
 
                     {currentMenu.image && (
@@ -218,8 +229,19 @@ export const NewMenu = () => {
                         Enviar todos los menús
                     </button>
                 </div>
+                <div className="mt-3">
+                        <button
+                            className="btn btn-danger"
+                            type="button"
+                            onClick={() => navigate("/")}
+                        >
+                            Volver al Login
+                        </button>
+                    </div>
             </div>
         </div>
+        
+    
     </>
     );
 };
