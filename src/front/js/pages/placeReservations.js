@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from 'react-router-dom';
 import { PlaceReservationCard } from "../component/placeReservationCard";
 import { Context } from "../store/appContext"
+import Swal from 'sweetalert2'
 
 export const PlaceReservations = () => {
 
@@ -12,14 +13,14 @@ export const PlaceReservations = () => {
         navigate(-1);
     };
 
-    const diasSemana = ["Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado"]
+    const diasSemana = ["lunes", "martes", "miercoles", "jueves", "viernes", "sabado"]
     const [reservas, setReservas] = useState([{
-        "Lunes": "",
-        "Martes": "",
-        "Miercoles": "",
-        "Jueves": "",
-        "Viernes": "",
-        "Sabado": ""
+        "lunes": "",
+        "martes": "",
+        "miercoles": "",
+        "jueves": "",
+        "viernes": "",
+        "sabado": ""
     }]);
 
     useEffect(() => {
@@ -45,7 +46,11 @@ export const PlaceReservations = () => {
         console.log(actions);
         let resp = await actions.guardarReserva(reservas)
         if (resp) {
-            alert("Reservas guardadas con éxito");
+                            Swal.fire({
+                                icon: "success",
+                                title: "Reservas guardadas con éxito",
+                                text: "",
+                            });
         } else {
             alert("Hubo un problema al guardar las reservas");
         }
@@ -72,14 +77,18 @@ export const PlaceReservations = () => {
 
             <div className="col-6 d-flex flex-wrap justify-content-center gap-3">
                 {diasSemana.map((dia, index) => (
-                    <PlaceReservationCard key={index} dia={dia} actualizarReserva={actualizarReserva} />
+                    <PlaceReservationCard 
+                    key={index} 
+                    dia={dia.charAt(0).toUpperCase() + dia.slice(1)}
+                    hora={reservas[dia] || ""}
+                    actualizarReserva={(nuevaHora) => actualizarReserva(dia, nuevaHora)} />
                 ))}
             </div>
 
             <div className="container d-flex justify-content-center mx-auto my-3">
                 <button className="btn btn-dark" style={{ width: "20rem", padding: '10px', marginLeft: '7px', marginRight: '7px', cursor: 'pointer', borderRadius: '25px' }}
                     title="Eliminar reserva"
-                // onClick={guardarReservas}
+                // onClick={}
                 >
                     <div className="d-flex justify-content-center py-auto">
                         <div className="ms-3">
@@ -106,6 +115,3 @@ export const PlaceReservations = () => {
         </div>
     )
 }
-
-
-

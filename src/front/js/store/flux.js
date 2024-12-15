@@ -170,9 +170,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 					console.error("Error al obtener opciones:", error);
 				}
 			},
-			
-
-
 
 			guardarReserva: async (reservas) => {
 				try {
@@ -229,6 +226,29 @@ const getState = ({ getStore, getActions, setStore }) => {
 					}
 				} catch (error) {
 					console.error("Error al traer reservas:", error);
+					return false
+				}
+			},
+
+			eliminarReserva: async () => {
+				try {
+					const token = localStorage.getItem("access_token");
+					const response = await fetch(process.env.BACKEND_URL + "api/reservations", {
+						method: "DELETE",
+						headers: {
+							"Content-Type": "application/json",
+							"Authorization": "Bearer " + token
+						},
+
+					});
+					console.log(response);
+					if (response.status == 200) {
+						const data = await response.json();
+						console.log("Reservas", data);
+						return true;
+					}
+				} catch (error) {
+					console.error("Error al eliminar reservas:", error);
 					return false
 				}
 			},

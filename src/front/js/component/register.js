@@ -87,12 +87,7 @@ export const Register = () => {
             let respLogin = await actions.login(userLogin)
             if (respLogin) {
                 navigate("/menu")
-                Swal.fire({
-                    icon: "success",
-                    title: "usuario registrado con exito",
-                    text: "bienvenido",
-        
-                });
+
             }
 
         }

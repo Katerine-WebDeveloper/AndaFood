@@ -14,13 +14,7 @@ export const PlaceReservationCard = ({ dia, hora, actualizarReserva }) => {
     const seleccionarHora = (hora) => {
         setHoraSeleccionada(hora);
         setReserva("Tienes reserva"); 
-        actualizarReserva(dia, hora);
-    };
-
-    const eliminarReserva = () => {
-        setHoraSeleccionada("");
-        setReserva("Sin reserva");
-        actualizarReserva(dia, "");
+        actualizarReserva(hora);
     };
 
     const listaHoras=["11:30", "12:00", "12:30", "13:00", "13:30"];
@@ -81,20 +75,6 @@ export const PlaceReservationCard = ({ dia, hora, actualizarReserva }) => {
                         </p>
                     </div>
 
-                    {/* <p className="card-text text mb-3">
-                        <i>Lugares disponibles: 5</i>
-                    </p>
-                    <div className="border-top d-flex justify-content-between">
-                        <p className="card-text text mt-3">
-                            <i>Eliminar reserva </i>
-                        </p>
-                        <button
-                            className="btn btn-dark border btn-sm px-3 mt-2 rounded-pill"
-                            type="button" onClick={eliminarReserva}
-                        >
-                            <i className="fa-solid fa-bucket"></i>
-                        </button>
-                    </div> */}
                 </div>
             </div>
         </div>
