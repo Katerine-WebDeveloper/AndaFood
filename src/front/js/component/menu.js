@@ -97,11 +97,18 @@ export const Menu = () => {
           {store.user?.is_admin && (
         <div className="text-end mb-3">
              <button
-                                className="btn btn-danger"
+                                className="btn btn-danger m-2"
                                 type="button"
                                 onClick={() => navigate("/newMenu")}
                             >
                                <i class="fa-solid fa-bowl-food"></i> Volver a Nuevo Menú
+                            </button>
+                            <button
+                                className="btn btn-danger"
+                                type="button"
+                                onClick={() => navigate("/newOptions")}
+                            >
+                               <i class="fa-solid fa-bowl-food"></i> Volver a Otras opciones
                             </button>
         </div>
     )}
