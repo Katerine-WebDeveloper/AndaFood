@@ -18,6 +18,7 @@ import {NewMenu} from "./pages/newMenu";
 import { NewOption } from "./pages/newOptions";
 import { SendEmail } from "./component/send-email";
 import { RecuperarPassword } from "./component/recuperar-password";
+import { PaymentCash} from "./component/finalPaymentProcess";
 
 
 
@@ -53,6 +54,7 @@ const Layout = () => {
                         <Route element={<RecuperarPassword />} path="/recuperar-password" />
                         <Route element={<SendEmail />} path="/send-email" />
                         <Route element={<NewOption />} path="/newOptions" />
+                        <Route element={<PaymentCash />} path="/finalPaymentProcess" />
                         <Route element={<h1>Not found!</h1>} />
 
                     </Routes>

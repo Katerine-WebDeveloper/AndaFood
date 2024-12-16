@@ -13,20 +13,16 @@ const getState = ({ getStore, getActions, setStore }) => {
 			menuJueves: [],
 			menuViernes: [],
 			menuSabado: [],
-			optionCocaCola: [],
-			optionCocaColaZ: [],
-			optionCocaColaL: [],
-			optionAgua: [],
-			optionNaranja: [],
-			optionManzana: [],
-			reservas: []
+			menuOptions: [],
+			reservas: [],
+			listaDeOrdenes: [],
 
 		},
 		actions: {
 			// Use getActions to call a function within a function
 			pagoMercadoPago: async (total) => {
 				try {
-					const response = await fetch("https://crispy-rotary-phone-x59p57vpggwjfv5x5-3001.app.github.dev/api/preference", {
+					const response = await fetch(process.env.BACKEND_URL + "/api/preference", {
 						method: "POST",
 						headers: { "Content-Type": "application/json" },
 						body: JSON.stringify({ total: total })
@@ -135,41 +131,68 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			},
 
+			// getOptions: async () => {
+			// 	try {
+			// 		const response = await fetch(process.env.BACKEND_URL + "api/menuoptions/");
+
+			// 		if (!response.ok) {
+			// 			throw new Error('Error en la respuesta del servidor');
+			// 		}
+
+			// 		const data = await response.json();
+			// 		console.log(data);
+
+
+			// 		if ("CocaCola") {
+			// 			setStore({ optionCocaCola: data });
+			// 		}
+			// 		if ("CocaCola Zero") {
+			// 			setStore({ optionCocaColaZ: data });
+			// 		}
+			// 		if ("CocaCola Light") {
+			// 			setStore({ optionCocaColaL: data });
+			// 		}
+			// 		if ("Agua") {
+			// 			setStore({ optionAgua: data });
+			// 		}
+			// 		if ("Naranja") {
+			// 			setStore({ optionNaranja: data });
+			// 		}
+			// 		if ("Manzana") {
+			// 			setStore({ optionManzana: data });
+			// 		}
+
+			// 	} catch (error) {
+			// 		console.error("Error al obtener opciones:", error);
+			// 	}
+			// },}
+
 			getOptions: async () => {
 				try {
 					const response = await fetch(process.env.BACKEND_URL + "api/menuoptions/");
-
+			
 					if (!response.ok) {
 						throw new Error('Error en la respuesta del servidor');
 					}
-
+			
 					const data = await response.json();
-					console.log(data);
-
-
-					if ("CocaCola") {
-						setStore({ optionCocaCola: data });
+					console.log("Opciones recibidas:", data);
+			
+					if (Array.isArray(data)) {
+						setStore({ menuOptions: data });
+					} else {
+						console.error("Received data is not an array:", data);
+						setStore({ menuOptions: [] });
 					}
-					if ("CocaCola Zero") {
-						setStore({ optionCocaColaZ: data });
-					}
-					if ("CocaCola Light") {
-						setStore({ optionCocaColaL: data });
-					}
-					if ("Agua") {
-						setStore({ optionAgua: data });
-					}
-					if ("Naranja") {
-						setStore({ optionNaranja: data });
-					}
-					if ("Manzana") {
-						setStore({ optionManzana: data });
-					}
-
 				} catch (error) {
 					console.error("Error al obtener opciones:", error);
+					setStore({ menuOptions: [] });
 				}
 			},
+			
+			  
+			
+			
 			
 
 
@@ -333,6 +356,115 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 
 			},
+
+
+			getListaDeOrdenes: async () => {
+				try {
+				  const response = await fetch(process.env.BACKEND_URL + "api/ordenes", {
+					method: "GET",
+					headers: {
+					  "Content-Type": "application/json",
+					  // Eliminar la verificación de autorización
+					  // "Authorization": "Bearer " + localStorage.getItem("access_token")
+					},
+				  });
+				  if (!response.ok) {
+					throw new Error("Error al obtener las órdenes");
+				  }
+				  const data = await response.json();
+				  console.log("Órdenes obtenidas:", data);
+				  setStore({ listaDeOrdenes: data });
+				  return true;
+				} catch (error) {
+				  console.error("Error al obtener las órdenes:", error);
+				  return false;
+				}
+			  },
+			  
+
+			//   createListaDeOrden: async (orderData) => {
+			// 	try {
+			// 	  const response = await fetch(process.env.BACKEND_URL + "api/ordenes", {
+			// 		method: "POST",
+			// 		headers: {
+			// 		  "Content-Type": "application/json",
+			// 		  // Eliminar la verificación de autorización
+			// 		  // "Authorization": "Bearer " + localStorage.getItem("access_token")
+			// 		},
+			// 		  body: JSON.stringify(orderData), // Aquí se envía el cuerpo con los datos de la orden
+			// 	  });
+			// 	  console.log("URL de backend:", process.env.BACKEND_URL + "api/ordenes");
+			// 	  console.log("Datos de la orden enviados:", orderData);
+
+			  
+			// 	  if (!response.ok) {
+			// 		const errorText = await response.text(); // Obtener detalles del error
+			// 		console.error("Error en la respuesta:", errorText);
+			// 		throw new Error("Error al crear la orden");
+			// 	}				
+			  
+			// 	  const data = await response.json();
+			// 	  console.log("Orden creada:", data);
+			// 	  console.log("Estado de la respuesta:", response.status);
+			// 	  console.log("Encabezados de la respuesta:", response.headers);
+
+			  
+			// 	  // Actualizar el estado de la aplicación, por ejemplo, agregar la nueva orden a la lista
+			// 	  setStore(prevStore => ({
+			// 		...prevStore,
+			// 		listaDeOrdenes: [...prevStore.listaDeOrdenes, data]
+			// 	  }));
+			  
+			// 	  return true;
+			// 	} catch (error) {
+			// 	  console.error("Error al crear la orden:", error);
+			// 	  return false;
+				  
+			// 	}
+				
+			//   },
+			
+			createListaDeOrden: async (orders) => {
+				try {
+				  // Verificar que `orders` sea un array antes de enviarlo
+				  if (!Array.isArray(orders)) {
+					console.error("Se esperaba un array de órdenes, pero se recibió:", orders);
+					return false;
+				  }
+			  
+				  // Hacer el POST enviando el array completo
+				  const response = await fetch(process.env.BACKEND_URL + "api/ordenes", {
+					method: "POST",
+					headers: {
+					  "Content-Type": "application/json",
+					},
+					body: JSON.stringify(orders), // Aquí se envía el array completo
+				  });
+			  
+				  if (!response.ok) {
+					const errorData = await response.json();
+					console.error("Error en la respuesta:", errorData);
+					throw new Error("Error al crear las órdenes");
+				  }
+			  
+				  const data = await response.json();
+				  console.log("Órdenes creadas:", data);
+			  
+				  // Actualizar el estado de la aplicación con las nuevas órdenes
+				  setStore((prevStore) => ({
+					...prevStore,
+					listaDeOrdenes: [...prevStore.listaDeOrdenes, ...data], // Agregar todas las nuevas órdenes
+				  }));
+			  
+				  return true;
+				} catch (error) {
+				  console.error("Error al crear las órdenes:", error);
+				  return false;
+				}
+			  },
+				  
+			
+			
 
 		}
 	};

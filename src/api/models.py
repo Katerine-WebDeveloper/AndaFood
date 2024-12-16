@@ -48,7 +48,7 @@ class Menu(db.Model):
     name = db.Column(db.String(100), nullable=False)
     description = db.Column(db.String(255), nullable=True)
     img = db.Column(db.String(1000), nullable=False)
-    price = db.Column(db.String(20), nullable=False)  
+    price = db.Column(db.Float, nullable=False)
 
     def __repr__(self):
         return f'<Menu {self.name}>'
@@ -76,7 +76,7 @@ class MenuOptions(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
     img = db.Column(db.String(1000), nullable=False)
-    price = db.Column(db.String(20), nullable=False)  
+    price = db.Column(db.Float, nullable=False)
 
     def __repr__(self):
         return f'<MenuOptions {self.name}>'
@@ -123,4 +123,54 @@ class Reserva(db.Model):
             "sabado":self.sabado,
         }
             
-        
+# ListaDeOrdenes
+
+from datetime import datetime
+
+class ListaDeOrdenes(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
+    menu_id = db.Column(db.Integer, db.ForeignKey("menu.id"), nullable=True)
+    option_id = db.Column(db.Integer, db.ForeignKey("menu_options.id"), nullable=True)
+    cantidad = db.Column(db.Integer, nullable=False, default=1)
+    total_price = db.Column(db.String(20), nullable=False)
+    fecha_orden = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+
+    user = db.relationship("User", backref="lista_de_ordenes")
+    menu = db.relationship("Menu", backref="lista_de_ordenes")
+    option = db.relationship("MenuOptions", backref="lista_de_ordenes")
+
+    def __repr__(self):
+        return f'<ListaDeOrdenes {self.id}>'
+
+    def __init__(self, user_id, menu_id, cantidad, option_id=None):
+        self.user_id = user_id
+        self.menu_id = menu_id
+        self.cantidad = cantidad
+        self.option_id = option_id
+        self.total_price = self.calculate_total_price()
+
+    def calculate_total_price(self):
+        # Ensure menu and menu_option are not None before accessing their attributes
+        if not self.menu:
+            raise ValueError("Menu not found")
+
+        menu_price = float(self.menu.price) if self.menu and self.menu.price else 0
+        option_price = float(self.option.price) if self.option and self.option.price else 0
+
+        return str((menu_price + option_price) * self.cantidad)
+
+    def serialize(self):
+        return {
+            "id": self.id,
+            "user_id": self.user_id,
+            "menu_id": self.menu_id,
+            "option_id": self.option_id,
+            "cantidad": self.cantidad,
+            "total_price": self.total_price,
+            "fecha_orden": self.fecha_orden,
+            "menu_name": self.menu.name if self.menu else None,
+            "menu_img": self.menu.img if self.menu else None,
+            "option_name": self.option.name if self.option else None,
+            "option_img": self.option.img if self.option else None,
+        }

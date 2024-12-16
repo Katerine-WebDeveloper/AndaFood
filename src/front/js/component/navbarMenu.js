@@ -2,8 +2,11 @@ import React, { useState, useEffect, useContext, useActionState } from "react";
 import andalogofood from "../../img/anda.png";
 import userlogo from "../../img/user.webp";
 
+import "../../styles/home.css";
+
 import { Link } from 'react-router-dom';
 import { SelectedMenuData } from "./cardMenu";
+import { SelectedOptionData } from "./cardOptions"; 
 import { useNavigate } from "react-router-dom";
 import { Context } from "../store/appContext";
 
@@ -13,7 +16,7 @@ export const MenuNavbar = (props) => {
   const [spinner, setSpinner] = useState(false);
   const { actions, store } = useContext(Context)
   const navigate = useNavigate();
-  const { listCart } = useContext(SelectedMenuData);
+  const { listCart, setListCart } = useContext(SelectedMenuData);
   const logout = () => {
     localStorage.removeItem("access_token");
     setStore({ user: null, token: null, auth: false });
@@ -29,17 +32,59 @@ export const MenuNavbar = (props) => {
     if (listCart.length === 0) {
       alert("El carrito está vacío. Por favor, añade productos antes de pagar.");
     } else {
-      setSpinner(true)
-      setTimeout(() => {
-        setSpinner(false)
-        irAPayment();
-      }, 2000)
+      setSpinner(true);
+      setTimeout(async () => {
+        setSpinner(false);
+  
+    const newOrders = listCart.map(item=>({
+      ...item,
+      cantidad: item.quantity,
+    }))
+
+        // Llamar a createOrder con los datos necesarios, ya no se necesita store.user
+        const orderData = await actions.createListaDeOrden(newOrders);
+  
+        if (orderData) {
+          // Si la orden fue creada correctamente, puedes navegar a otra página
+          irAPayment();
+        } else {
+          alert("Hubo un problema al crear la orden.");
+        }
+      }, 2000);
     }
   };
+  
+  
 
   const irAPayment = () => {
     navigate("/payment");
   };
+
+  const updateCantidad = (index, action) => {
+    const updatedCart = listCart.map((item, idx) => {
+      if (idx === index) {
+        const newQuantity = action === "aumentar" ? item.quantity + 1 : item.quantity - 1;
+        return {
+          ...item,
+          quantity: Math.max(1, newQuantity), // No permitir menos de 1
+          newprice: Math.max(1, newQuantity) * item.price,
+        };
+      }
+      return item;
+    }).filter(item => item.quantity >= 0); // Eliminar elementos con cantidad <= 0
+  
+    setListCart(updatedCart);
+    console.log("Updated cart:", updatedCart);
+  };
+  
+
+const clearCart = () => {
+  // Clear the cart by setting listCart to an empty array
+  setListCart([]);
+};
+
+  
+  
 
   return (
     <nav className="navbar bg-body-tertiary">
@@ -199,22 +244,14 @@ export const MenuNavbar = (props) => {
             <div
               className="listCart offcanvas-body position-relative"
             >
-              {props.spinner && (
-                <div
-                  className="spinner-grow d-flex justify-content-center"
-                  role="status"
-                  style={{ backgroundColor: "#3865e5" }}
-                >
-                  <span className="visually-hidden">Loading...</span>
-                </div>
-              )}
-
+              
+              <div className="cart-list-container">
               {listCart.length === 0 ? (
                 <p>El carrito está vacío.</p>
               ) : (
                 listCart.map((item, index) => (
                   <div
-                    key={item.id}
+                    key={`${item.id}-${index}`}
                     className="d-flex align-items justify-content-evenly"
                     style={{ backgroundColor: "white" }}
                   >
@@ -230,22 +267,23 @@ export const MenuNavbar = (props) => {
                     </div>
 
                     <div
-                      className="foodName d-flex justify-content-center align-items-center"
+                      className="foodName d-flex justify-content-center align-items-center ms-3"
                       style={{ color: "#3865e5" }}
                     >
                       {item.name}
                     </div>
 
                     <div
-                      className="precioTotal d-flex justify-content-center align-items-center"
+                      className="precioTotal d-flex justify-content-center align-items-center ms-2"
                       style={{ color: "#3865e5" }}
                     >
-                      {item.price}
+                      ${item.newprice}
                     </div>
 
                     <div className="cantidad d-flex justify-content-center align-items-center">
-                      <span
+                      <button
                         className="menos"
+                        onClick={() => updateCantidad(index, "decrecer")}
                         style={{
                           width: "30px",
                           height: "30px",
@@ -258,10 +296,11 @@ export const MenuNavbar = (props) => {
                         }}
                       >
                         {"<"}
-                      </span>
-                      <span className="text-center">1</span>
-                      <span
+                      </button>
+                      <span className="text-center">{item.quantity}</span>
+                      <button
                         className="mas"
+                        onClick={() => updateCantidad(index, "aumentar")}
                         style={{
                           width: "30px",
                           height: "30px",
@@ -274,13 +313,14 @@ export const MenuNavbar = (props) => {
                         }}
                       >
                         {">"}
-                      </span>
+                      </button>
                     </div>
                   </div>
                 ))
               )}
+              </div>
 
-              <div className="btn position-absolute bottom-0 start-0 end-0 d-flex justify-content-between">
+              <div className="btn-container btn position-absolute bottom-0 start-0 end-0 d-flex justify-content-between">
                 <button
                   type="button"
                   className="close align-self-start"
@@ -289,6 +329,16 @@ export const MenuNavbar = (props) => {
                 >
                   VOLVER
                 </button>
+
+                <button
+                  className="clear-cart align-self-center text-light btn-danger"
+                  onClick={clearCart}
+                  style={{ backgroundColor: "red", borderRadius: "10px" }}
+                >
+                  LIMPIAR CARRITO
+                </button>
+
+
                 <button
                   className="pay align-self-end text-light btn-success"
                   id="process-checkout"
@@ -297,11 +347,21 @@ export const MenuNavbar = (props) => {
                   IR A PAGAR
                 </button>
               </div>
+
             </div>
           </div>
 
 
         </div>
+        {props.spinner && (
+                <div
+                  className="spinner-grow d-flex justify-content-center"
+                  role="status"
+                  style={{ backgroundColor: "#3865e5" }}
+                >
+                  <span className="visually-hidden">Loading...</span>
+                </div>
+              )}
       </div>
     </nav>
   )
