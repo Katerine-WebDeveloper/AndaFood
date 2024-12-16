@@ -76,6 +76,7 @@ footer {
     border-radius: 10px ;
     border: none;
     padding:10px;
+    transform: scale(1.1);
 
 }
 
@@ -160,15 +161,22 @@ border-radius: 10px;
     transform: scale(1.1)
   }
 
+  .trans:hover{
+    transform: scale(1.2)
+  }
+
   .register{
     margin-top: 100px;
   }
   
  .sendemail{
-    margin-bottom: 135px ;
+    margin-bottom: 145px ;
  }
 
  .reserva{
-    padding-top: 120px;
-    padding-bottom:120px;
+    padding-bottom:165px;
+ }
+
+ .reservations{
+    background-color: #3d8afd ;
  }

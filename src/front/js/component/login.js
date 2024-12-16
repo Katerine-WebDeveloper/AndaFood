@@ -73,8 +73,8 @@ export const Login = () => {
 					</div>
 
 					<div className="text-center mt-2">
-						<Link to= {"/send-email"} className="custom-link">
-						<p>¿Olvidaste tu contraseña?</p>
+						<Link to= {"/send-email"} className="custom-link trans">
+						<p className="">¿Olvidaste tu contraseña?</p>
 						</Link>
 					</div>
 

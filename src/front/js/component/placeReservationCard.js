@@ -29,7 +29,7 @@ export const PlaceReservationCard = ({ dia, hora, actualizarReserva }) => {
 
     return (
         <>
-        <Navbar/>
+   
         <div className="d-flex flex-wrap ">
             <div
                 className="card my-1 py-1"

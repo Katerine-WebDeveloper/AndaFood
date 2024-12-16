@@ -14,11 +14,8 @@ export const MenuNavbar = (props) => {
   const { actions, store } = useContext(Context)
   const navigate = useNavigate();
   const { listCart } = useContext(SelectedMenuData);
-  const logout = () => {
-    localStorage.removeItem("access_token");
-    setStore({ user: null, token: null, auth: false });
-    console.log("Sesión cerrada");
-  };
+
+
 
   const handleLogout = () => {
     actions.logout();
@@ -50,7 +47,7 @@ export const MenuNavbar = (props) => {
           <img src={andalogofood} alt="Anda Food Logo" style={{ width: "50px", height: "50px", marginRight: "10px", "borderRadius": "10px" }} />
         </div>
 
-        {/* imagen user, perfil usuario */}
+    
         <div className="offcanvas offcanvas-start coloroffcanvas" data-bs-scroll="true" data-bs-backdrop="false" tabIndex="-1" id="offcanvasScrolling" aria-labelledby="offcanvasScrollingLabel">
 
           <div className="offcanvas-header">

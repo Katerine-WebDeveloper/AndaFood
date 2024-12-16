@@ -56,25 +56,23 @@ export const PlaceReservations = () => {
 
     return (
         <>
-        <Navbar/>
-        <div className="d-flex flex-column align-items-center mt-3 reserva" style={{ marginBottom: "20px", fontFamily: "Mulish, sans-serif" }}>
-
-            <div className="d-flex align-items-center">
+  
+        <div className="d-flex flex-column align-items-center mt-4 reserva" style={{ marginBottom: "20px", fontFamily: "Mulish, sans-serif" }}>
+         
+            <div className="d-flex mb-4">
                 <button className="btn btn-white" style={{ padding: '10px', marginLeft: '10px', marginRight: '30px', cursor: 'pointer', borderRadius: '25px', borderColor: 'gray', backgroundColor: "rgba(56, 101, 229, 0.2)" }}
                     title="Volver al menú"
                     onClick={volver}
                 >
                     <div className="d-flex">
+                        <i className="fa-solid fa-arrow-left fa-xl ms-1 my-auto me-1"></i>
                         Menú
-                        <i className="fa-solid fa-arrow-left fa-xl ms-1 my-auto"></i>
                     </div>
                 </button>
                 <h2 className="text-center" style={{ color: "rgb(56, 101, 229)" }}>RESERVAR LUGAR EN COMEDOR</h2>
-
-
             </div>
 
-            <div className="col-6 d-flex flex-wrap justify-content-center gap-3">
+            <div className="col-6 d-flex flex-wrap justify-content-center gap-3 mt-5">
                 {diasSemana.map((dia, index) => (
                     <PlaceReservationCard key={index} dia={dia} actualizarReserva={actualizarReserva} />
                 ))}
