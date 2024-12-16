@@ -13,6 +13,7 @@ export const PlaceReservations = () => {
         navigate(-1);
     };
 
+    
     const diasSemana = ["lunes", "martes", "miercoles", "jueves", "viernes", "sabado"]
     const [reservas, setReservas] = useState([{
         "lunes": "",
