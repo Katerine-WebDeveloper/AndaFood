@@ -230,6 +230,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			},
 
+			
 			eliminarReserva: async () => {
 				try {
 					const token = localStorage.getItem("access_token");

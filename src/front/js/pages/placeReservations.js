@@ -34,27 +34,49 @@ export const PlaceReservations = () => {
     const actualizarReserva = (diaSemana, nuevaHora) => {
         console.log(diaSemana, nuevaHora),
             setReservas((prev) => {
-                return {...prev, [diaSemana]: nuevaHora,};
+                return { ...prev, [diaSemana]: nuevaHora, };
             });
-            setReservas({ ...reservas, [diaSemana]: nuevaHora });
+        setReservas({ ...reservas, [diaSemana]: nuevaHora });
     };
 
 
     const guardarReservas = async () => {
-        console.log(reservas["Lunes"]);
-        console.log(actions);
+        //console.log(reservas["Lunes"]);
+        //console.log(actions);
         let resp = await actions.guardarReserva(reservas)
         if (resp) {
-                            Swal.fire({
-                                icon: "success",
-                                title: "Reservas guardadas con éxito",
-                                text: "",
-                            });
+            Swal.fire({
+                icon: "success",
+                title: "Reservas guardadas con éxito",
+                text: "",
+            });
         } else {
             alert("Hubo un problema al guardar las reservas");
         }
     }
 
+
+    const eliminarReservas = async () => {
+        let resp = await actions.eliminarReserva(reservas)
+        if (resp) {
+            setReservas({
+                "lunes": "--",
+                "martes": "--",
+                "miercoles": "--",
+                "jueves": "--",
+                "viernes": "--",
+                "sabado": "--"
+            });
+
+            Swal.fire({
+                icon: "success",
+                title: "Reservas eliminadas con éxito",
+                text: "",
+            });
+        } else {
+            alert("Hubo un problema al eliminar las reservas");
+        }
+    }
 
     return (
         <div className="d-flex flex-column align-items-center mt-3" style={{ marginBottom: "20px", fontFamily: "Mulish, sans-serif" }}>
@@ -76,18 +98,18 @@ export const PlaceReservations = () => {
 
             <div className="col-6 d-flex flex-wrap justify-content-center gap-3">
                 {diasSemana.map((dia, index) => (
-                    <PlaceReservationCard 
-                    key={index} 
-                    dia={dia.charAt(0).toUpperCase() + dia.slice(1)}
-                    hora={reservas[dia] || ""}
-                    actualizarReserva={(nuevaHora) => actualizarReserva(dia, nuevaHora)} 
-                    reservas={ dia=="lunes" ? store?.reservas[0]?.lunes
-                         : dia=="martes" ? store?.reservas[0]?.martes
-                         : dia=="miercoles" ? store?.reservas[0]?.miercoles 
-                         : dia=="jueves" ? store?.reservas[0]?.jueves 
-                         : dia=="viernes" ? store?.reservas[0]?.viernes 
-                         : dia=="sabado" ? store?.reservas[0]?.sabado 
-                         : null}
+                    <PlaceReservationCard
+                        key={index}
+                        dia={dia.charAt(0).toUpperCase() + dia.slice(1)}
+                        hora={reservas[dia] || ""}
+                        reservas={dia == "lunes" ? store?.reservas[0]?.lunes
+                            : dia == "martes" ? store?.reservas[0]?.martes
+                                : dia == "miercoles" ? store?.reservas[0]?.miercoles
+                                    : dia == "jueves" ? store?.reservas[0]?.jueves
+                                        : dia == "viernes" ? store?.reservas[0]?.viernes
+                                            : dia == "sabado" ? store?.reservas[0]?.sabado
+                                                : null}
+                        actualizarReserva={(nuevaHora) => actualizarReserva(dia, nuevaHora)}
                     />
 
                 ))}
@@ -96,11 +118,11 @@ export const PlaceReservations = () => {
             <div className="container d-flex justify-content-center mx-auto my-3">
                 <button className="btn btn-dark" style={{ width: "20rem", padding: '10px', marginLeft: '7px', marginRight: '7px', cursor: 'pointer', borderRadius: '25px' }}
                     title="Eliminar reserva"
-                onClick={() => actions.eliminarReserva()}
+                    onClick={() => eliminarReservas()}
                 >
                     <div className="d-flex justify-content-center py-auto">
                         <div className="ms-3">
-                        Eliminar agenda
+                            Eliminar agenda
                         </div>
                         <i className="fa-solid fa-bucket my-auto ms-3"></i>
                     </div>

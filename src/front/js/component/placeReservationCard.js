@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from "react";
 
-export const PlaceReservationCard = ({ dia, hora, actualizarReserva, reservas }) => {
+export const PlaceReservationCard = ({ dia, hora, reservas, actualizarReserva }) => {
 
     const [horaSeleccionada, setHoraSeleccionada] = useState(hora || "");
     const [reserva, setReserva] = useState(hora ? "Tienes reserva" : "Sin reserva");
