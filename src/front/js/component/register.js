@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { useNavigate } from 'react-router-dom';
 import userRegisterImage from "../../img/user.webp";
 import Swal from 'sweetalert2'
+import { Navbar } from "../component/loginnavbar"
 
 export const Register = () => {
 
@@ -112,48 +113,20 @@ export const Register = () => {
     }
 
     return (
-        <div className="mx-auto" style={{ width: "350px" }}>
-            <div className="text-center">
-                <h1 className="text-center pt-4">Registrarse</h1>
-                <img className="registeruser" src={userRegisterImage} alt="Descripción de la imagen" />
-            </div>
+        <>
 
+            <Navbar/>
 
-            <div className="mb-2">
-                <label className="form-label">Nombres</label>
-                <input type="text" value={name} onChange={(event) => setName(event.target.value)} className="form-control" id="exampleFormControlInput1" placeholder="Nombres" />
-            </div>
-            <div className="mb-2">
-                <label className="form-label">Apellidos</label>
-                <input type="text" value={last_name} onChange={(event) => setLast_name(event.target.value)} className="form-control" id="exampleFormControlInput2" placeholder="Apellidos" />
-            </div>
-            <div className="mb-2">
-                <label className="form-label">Correo electrónico</label>
-                <input type="email" value={email} onChange={(event) => setEmail(event.target.value)} className="form-control" id="exampleFormControlInput13" placeholder="Email" />
-            </div>
-            <div className="mb-2">
-                <label className="form-label">Número de funcionario</label>
-                <input type="text" value={num_funcionario} onChange={(event) => setNum_funcionario(event.target.value)} className="form-control" id="exampleFormControlInput4" placeholder="" />
-            </div>
-            <div className="mb-2">
-                <label className="form-label">Contraseña</label>
-                <div className="d-flex">
-                    <input type={shown ? 'text' : 'password'} value={password} onChange={(event) => setPassword(event.target.value)} id="inputPassword6" className="form-control" aria-describedby="passwordHelpInline" />
-                    <button onClick={switchShown} className="btn btn-outline-primary">
-                        {shown ? <i className="fa fa-eye-slash"></i> : <i className="fa fa-eye"></i>}
-                    </button>
+            <div className="mx-auto register" style={{ width: "350px" }}>
+                <div className="text-center">
+                    <h1 className="text-center pt-4">Registrarse</h1>
+                    <img className="registeruser" src={userRegisterImage} alt="Descripción de la imagen" />
                 </div>
-                <span id="passwordHelpInline" className="form-text">
-                    Debe contener de 8 a 20 caracteres.
-                </span>
-            </div>
-            <div className="mb-3">
-                <label className="form-label">Confirmar contraseña</label>
-                <div className="d-flex">
-                    <input type={shown ? 'text' : 'password'} value={confirmar} onChange={(event) => setConfirmar(event.target.value)} id="inputPassword7" className="form-control" aria-describedby="passwordHelpInline" />
-                    <button onClick={switchShown} className="btn btn-outline-primary">
-                        {shown ? <i className="fa fa-eye-slash"></i> : <i className="fa fa-eye"></i>}
-                    </button>
+
+
+                <div className="mb-2">
+                    <label className="form-label">Nombres</label>
+                    <input type="text" value={name} onChange={(event) => setName(event.target.value)} className="form-control" id="exampleFormControlInput1" placeholder="Nombres" />
                 </div>
                 <div className="form-check form-switch">
                     <input
@@ -169,13 +142,6 @@ export const Register = () => {
                     </label>
                 </div>
             </div>
-            <div className="text-center mb-4">
-                <button type="button" onClick={(event) => signup(event)} className="btn btn-primary m-2">Registrarse</button>
-                <button type="button" onClick={volver} className="btn btn-primary ms-2">Volver</button>
-            </div>
-
-
-
-        </div>
+        </>
     )
 }
