@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { Navbar } from "../component/loginnavbar";
 import Swal from 'sweetalert2'
 
 
+
 export const NewMenu = () => {
+  
     const [menus, setMenus] = useState([]);
     const [currentMenu, setCurrentMenu] = useState({
         day: "",
