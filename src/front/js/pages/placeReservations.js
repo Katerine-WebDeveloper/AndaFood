@@ -27,7 +27,6 @@ export const PlaceReservations = () => {
         fetchReservas();
     }, []);
 
-
     const fetchReservas = async () => {
         let resp = await actions.traerReserva()
     }
@@ -81,14 +80,23 @@ export const PlaceReservations = () => {
                     key={index} 
                     dia={dia.charAt(0).toUpperCase() + dia.slice(1)}
                     hora={reservas[dia] || ""}
-                    actualizarReserva={(nuevaHora) => actualizarReserva(dia, nuevaHora)} />
+                    actualizarReserva={(nuevaHora) => actualizarReserva(dia, nuevaHora)} 
+                    reservas={ dia=="lunes" ? store?.reservas[0]?.lunes
+                         : dia=="martes" ? store?.reservas[0]?.martes
+                         : dia=="miercoles" ? store?.reservas[0]?.miercoles 
+                         : dia=="jueves" ? store?.reservas[0]?.jueves 
+                         : dia=="viernes" ? store?.reservas[0]?.viernes 
+                         : dia=="sabado" ? store?.reservas[0]?.sabado 
+                         : null}
+                    />
+
                 ))}
             </div>
 
             <div className="container d-flex justify-content-center mx-auto my-3">
                 <button className="btn btn-dark" style={{ width: "20rem", padding: '10px', marginLeft: '7px', marginRight: '7px', cursor: 'pointer', borderRadius: '25px' }}
                     title="Eliminar reserva"
-                // onClick={}
+                onClick={() => actions.eliminarReserva()}
                 >
                     <div className="d-flex justify-content-center py-auto">
                         <div className="ms-3">

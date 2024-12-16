@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from "react";
 
-export const PlaceReservationCard = ({ dia, hora, actualizarReserva }) => {
+export const PlaceReservationCard = ({ dia, hora, actualizarReserva, reservas }) => {
 
     const [horaSeleccionada, setHoraSeleccionada] = useState(hora || "");
     const [reserva, setReserva] = useState(hora ? "Tienes reserva" : "Sin reserva");
@@ -36,7 +36,7 @@ export const PlaceReservationCard = ({ dia, hora, actualizarReserva }) => {
                         <div className="d-flex justify-content-between">
                             <h5 className="card-title mb-3">{ dia }</h5>
                             <h5 className="card-title mb-3">
-                                Hora: {horaSeleccionada || "--"}
+                                Hora: {horaSeleccionada || reservas || "--"}
                             </h5>
 
                             <div className="btn-group dropend">

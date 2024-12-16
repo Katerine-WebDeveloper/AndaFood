@@ -19,7 +19,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			optionAgua: [],
 			optionNaranja: [],
 			optionManzana: [],
-			reservas: []
+			reservas: {}
 
 		},
 		actions: {
@@ -172,6 +172,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 
 			guardarReserva: async (reservas) => {
+				console.log(reservas)
 				try {
 					const token = localStorage.getItem("access_token");
 					const response = await fetch(process.env.BACKEND_URL + "api/reservations", {
@@ -182,12 +183,12 @@ const getState = ({ getStore, getActions, setStore }) => {
 						},
 						body: JSON.stringify(
 							{
-								lunes: reservas["Lunes"] || "",
-								martes: reservas["Martes"] || "",
-								miercoles: reservas["Miercoles"] || "",
-								jueves: reservas["Jueves"] || "",
-								viernes: reservas["Viernes"] || "",
-								sabado: reservas["Sabado"] || "",
+								lunes: reservas["lunes"] || "",
+								martes: reservas["martes"] || "",
+								miercoles: reservas["miercoles"] || "",
+								jueves: reservas["jueves"] || "",
+								viernes: reservas["viernes"] || "",
+								sabado: reservas["sabado"] || "",
 							}
 
 						),
@@ -217,7 +218,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 					console.log(response);
 					if (response.status == 200) {
 						const data = await response.json();
-						console.log("Reservas", data);
 						setStore({ reservas: data });
 						return true;
 					} else {
@@ -243,8 +243,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					});
 					console.log(response);
 					if (response.status == 200) {
-						const data = await response.json();
-						console.log("Reservas", data);
+						getActions().traerReserva()
 						return true;
 					}
 				} catch (error) {
