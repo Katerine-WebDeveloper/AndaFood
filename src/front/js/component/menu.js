@@ -94,6 +94,24 @@ export const Menu = () => {
           <h2 className="text-center" style={{ color: "rgb(56, 101, 229)", padding: "20px" }}>
             <i className="fa-solid fa-calendar-days"></i> MENÚ SEMANAL
           </h2>
+          {store.user?.is_admin && (
+        <div className="text-end mb-3">
+             <button
+                                className="btn btn-danger m-2"
+                                type="button"
+                                onClick={() => navigate("/newMenu")}
+                            >
+                               <i class="fa-solid fa-bowl-food"></i> Volver a Nuevo Menú
+                            </button>
+                            <button
+                                className="btn btn-danger"
+                                type="button"
+                                onClick={() => navigate("/newOptions")}
+                            >
+                               <i class="fa-solid fa-bowl-food"></i> Volver a Otras opciones
+                            </button>
+        </div>
+    )}
           <div className="row">
             {["Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado"].map((day) => (
               <div

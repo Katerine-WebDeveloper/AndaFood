@@ -91,9 +91,8 @@ export const CardOption = ({ option }) => {
                 <i className="fa-solid fa-cart-shopping"></i>
               </button>
             </div>
+            
           </div>
-        
-   
     </div>
     
   );

@@ -2,6 +2,7 @@ import React, { useContext, useState } from "react";
 import { Context } from "../store/appContext";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom"
+import {Navbar} from "../component/loginnavbar"
 
 import "../../styles/home.css";
 import homeImage from "../../img/home.png";
@@ -35,8 +36,11 @@ export const SendEmail = () => {
         }
     }
     return (
+        <>
+        
+        <Navbar/>
 
-        <div className="mt-5 mx-auto d-flex flex-wrap justify-content-center login" >
+        <div className="mt-5 mx-auto d-flex flex-wrap justify-content-center login sendemail" >
 
             <div className="text-center">
                 <img className="loginimage" src={homeImage} alt="Descripción de la imagen" />
@@ -62,5 +66,6 @@ export const SendEmail = () => {
 
             </form>
         </div>
+        </>
     );
 };

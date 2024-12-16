@@ -1,5 +1,7 @@
 
 import React, { useState, useEffect } from "react";
+import { Navbar } from "../component/loginnavbar"
+import "../../styles/home.css";
 
 export const PlaceReservationCard = ({ dia, hora, reservas, actualizarReserva }) => {
 
@@ -20,7 +22,9 @@ export const PlaceReservationCard = ({ dia, hora, reservas, actualizarReserva })
     const listaHoras=["11:30", "12:00", "12:30", "13:00", "13:30"];
 
     return (
-        <div className="d-flex flex-wrap">
+        <>
+   
+        <div className="d-flex flex-wrap ">
             <div
                 className="card my-1 py-1"
                 style={{
@@ -78,5 +82,6 @@ export const PlaceReservationCard = ({ dia, hora, reservas, actualizarReserva })
                 </div>
             </div>
         </div>
+    </>
     );
 };
