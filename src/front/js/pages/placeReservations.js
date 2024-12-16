@@ -60,12 +60,12 @@ export const PlaceReservations = () => {
         let resp = await actions.eliminarReserva(reservas)
         if (resp) {
             setReservas({
-                "lunes": "--",
-                "martes": "--",
-                "miercoles": "--",
-                "jueves": "--",
-                "viernes": "--",
-                "sabado": "--"
+                "lunes": "",
+                "martes": "",
+                "miercoles": "",
+                "jueves": "",
+                "viernes": "",
+                "sabado": ""
             });
 
             Swal.fire({
