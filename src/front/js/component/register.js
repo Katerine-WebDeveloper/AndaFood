@@ -75,7 +75,7 @@ export const Register = () => {
             num_funcionario: num_funcionario,
             email: email,
             password: password,
-            is_admin: isAdmin 
+            is_admin: isAdmin
         }
         // nuevo dato del nuevo usuario
         let resp = await actions.signup(newUser)
@@ -86,17 +86,27 @@ export const Register = () => {
                 password: password
 
             }
-        //mando al admin a la vista admin y no al menu
-            let respLogin = await actions.login(userLogin)
-            if (respLogin) {
-                navigate("/admin")
+
+            let respLogin = await actions.login(userLogin);
+
+            if (respLogin ==!isAdmin ) {
+                navigate("/menu");
                 Swal.fire({
                     icon: "success",
-                    title: "Usuario registrado con exito",
-                    text: "bienvenido",
-
+                    title: "Usuario registrado con éxito",
+                    text: "Bienvenido",
+                });
+            } else {
+                navigate("/admin");
+                Swal.fire({
+                    icon: "success",
+                    title: "Inicio de sesión exitoso",
+                    text: "Bienvenido al menú",
                 });
             }
+
+
+
 
         }
     }
@@ -151,8 +161,8 @@ export const Register = () => {
                         type="checkbox"
                         role="switch"
                         id="flexSwitchCheckDefault"
-                        onChange={() => setIsAdmin(!isAdmin)} 
-                        checked={isAdmin} 
+                        onChange={() => setIsAdmin(!isAdmin)}
+                        checked={isAdmin}
                     />
                     <label className="form-check-label" htmlFor="flexSwitchCheckDefault">
                         Soy Administrador
