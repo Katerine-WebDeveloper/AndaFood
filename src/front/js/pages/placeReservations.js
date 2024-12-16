@@ -2,6 +2,8 @@ import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from 'react-router-dom';
 import { PlaceReservationCard } from "../component/placeReservationCard";
 import { Context } from "../store/appContext"
+import "../../styles/home.css";
+import { Navbar } from "../component/loginnavbar"
 
 export const PlaceReservations = () => {
 
@@ -53,7 +55,9 @@ export const PlaceReservations = () => {
 
 
     return (
-        <div className="d-flex flex-column align-items-center mt-3" style={{ marginBottom: "20px", fontFamily: "Mulish, sans-serif" }}>
+        <>
+        <Navbar/>
+        <div className="d-flex flex-column align-items-center mt-3 reserva" style={{ marginBottom: "20px", fontFamily: "Mulish, sans-serif" }}>
 
             <div className="d-flex align-items-center">
                 <button className="btn btn-white" style={{ padding: '10px', marginLeft: '10px', marginRight: '30px', cursor: 'pointer', borderRadius: '25px', borderColor: 'gray', backgroundColor: "rgba(56, 101, 229, 0.2)" }}
@@ -104,6 +108,7 @@ export const PlaceReservations = () => {
             </div>
 
         </div>
+    </>
     )
 }
 

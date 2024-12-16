@@ -5,7 +5,9 @@
     one more css for each page that will contain the selected used 
     on that page only (the ones not reused in other pages).
 */
+body{
 
+}
 .form{
     background-color: white;
     padding: 20px;
@@ -20,6 +22,7 @@ footer {
     background-color: #3865e5;
     color: white;
     text-align: center;
+
 }
 .andalogo{
     width:90px;
@@ -140,5 +143,32 @@ box-shadow: -1px 4px 17px 0px rgba(0,0,0,0.13);
 border-radius: 10px;
 }
 
+/* boton login */
+/* From Uiverse.io by catraco */ 
+.botonlogin {
+    --color: #3d8bfd;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all .5s;
+    border: none;
+    background-color: #3d8afd;
+  }
 
+  .botonlogin:hover{
+    transform: scale(1.1)
+  }
 
+  .register{
+    margin-top: 100px;
+  }
+  
+ .sendemail{
+    margin-bottom: 135px ;
+ }
+
+ .reserva{
+    padding-top: 120px;
+    padding-bottom:120px;
+ }

@@ -21,8 +21,15 @@ export const Login = () => {
 			navigate("/menu")
 		}
 
-		if (resp.status && resp.rol) {
-			navigate("/admin")
+		if (resp) {
+			console.log(store.user)
+			if(store.user.is_admin){
+				navigate("/admin")
+			}
+			
+			if(user.email == "administrador@anda.com"){
+				navigate("/admin")
+			}
 		}
 	}
 
@@ -56,22 +63,23 @@ export const Login = () => {
 							})} />
 					</div>
 
-					<div className="text-center">
+					<div className="d-flex justify-content-center">
 
-						<button type="submit" className="btn btn-primary"
+						<button type="submit" className="btn btn-primary botonlogin "
 							onClick={() =>
 								loginUser()
-							}>Entrar</button>
+							}>Entrar
+						</button>
 					</div>
 
 					<div className="text-center mt-2">
-						<Link to= {"/send-email"}>
+						<Link to= {"/send-email"} className="custom-link">
 						<p>¿Olvidaste tu contraseña?</p>
 						</Link>
 					</div>
 
 					<div className="text-center mt-2">
-						<Link to={"/register"}>
+						<Link to={"/register"} className="custom-link">
 							<p className="text-info">Registrarse</p></Link>
 					</div>
 
