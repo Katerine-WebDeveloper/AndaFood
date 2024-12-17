@@ -91,14 +91,14 @@ export const Register = () => {
             let respLogin = await actions.login(userLogin);
 
             if (respLogin == !isAdmin) {
-                navigate("/menu");
+                navigate("/admin");
                 Swal.fire({
                     icon: "success",
                     title: "Usuario registrado con éxito",
                     text: "Bienvenido",
                 });
             } else {
-                navigate("/admin");
+                navigate("/menu");
                 Swal.fire({
                     icon: "success",
                     title: "Inicio de sesión exitoso",
