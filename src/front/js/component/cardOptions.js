@@ -24,7 +24,7 @@ export const CardOption = ({ option }) => {
       // Si el artículo no está en el carrito, lo agregamos con cantidad 1
       setListCart([
         ...listCart,
-        { ...option, quantity: 1, newprice: option.price, uniqueId } // Agregamos el uniqueId al objeto
+        { ...option, isOption: true, quantity: 1, newprice: option.price, uniqueId } // Agregamos el uniqueId al objeto
       ]);
     } else {
       // Si el artículo ya está en el carrito, actualizamos la cantidad y el precio

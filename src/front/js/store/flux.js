@@ -179,7 +179,10 @@ const getState = ({ getStore, getActions, setStore }) => {
 					console.log("Opciones recibidas:", data);
 			
 					if (Array.isArray(data)) {
-						setStore({ menuOptions: data });
+						setStore({ menuOptions: data.map(item=>({
+							...item,
+							isOption: true
+						})) });
 					} else {
 						console.error("Received data is not an array:", data);
 						setStore({ menuOptions: [] });
@@ -431,15 +434,28 @@ const getState = ({ getStore, getActions, setStore }) => {
 					console.error("Se esperaba un array de órdenes, pero se recibió:", orders);
 					return false;
 				  }
+
+				  for (const order of orders) {
+					const { user_id, menu_id, cantidad, option_id, total_price } = order;
 			  
-				  // Hacer el POST enviando el array completo
+					if (!user_id || !cantidad) {
+					  console.error("Faltan campos obligatorios en la orden:", order);
+					  return false;
+					}
+			  
 				  const response = await fetch(process.env.BACKEND_URL + "api/ordenes", {
 					method: "POST",
 					headers: {
 					  "Content-Type": "application/json",
 					},
-					body: JSON.stringify(orders), // Aquí se envía el array completo
-				  });
+					body: JSON.stringify({
+						user_id,
+						menu_id,
+						cantidad,
+						option_id,
+						total_price,
+					  }),
+					});
 			  
 				  if (!response.ok) {
 					const errorData = await response.json();
@@ -447,15 +463,16 @@ const getState = ({ getStore, getActions, setStore }) => {
 					throw new Error("Error al crear las órdenes");
 				  }
 			  
-				  const data = await response.json();
-				  console.log("Órdenes creadas:", data);
+				  const createdOrder = await response.json();
+      			  console.log("Orden creada:", createdOrder);
 			  
 				  // Actualizar el estado de la aplicación con las nuevas órdenes
-				  setStore((prevStore) => ({
-					...prevStore,
-					listaDeOrdenes: [...prevStore.listaDeOrdenes, ...data], // Agregar todas las nuevas órdenes
-				  }));
-			  
+					  setStore((prevStore) => ({
+						  ...prevStore,
+						  listaDeOrdenes: [...prevStore.listaDeOrdenes, createdOrder],
+					  }));
+					}
+
 				  return true;
 				} catch (error) {
 				  console.error("Error al crear las órdenes:", error);

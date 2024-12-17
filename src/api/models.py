@@ -143,12 +143,13 @@ class ListaDeOrdenes(db.Model):
     def __repr__(self):
         return f'<ListaDeOrdenes {self.id}>'
 
-    def __init__(self, user_id, menu_id, cantidad, option_id=None):
+    def __init__(self, user_id, menu_id, cantidad, option_id, total_price, fecha_orden):
         self.user_id = user_id
         self.menu_id = menu_id
         self.cantidad = cantidad
         self.option_id = option_id
-        self.total_price = self.calculate_total_price()
+        self.total_price = total_price
+        self.fecha_orden = fecha_orden
 
     def calculate_total_price(self):
         # Ensure menu and menu_option are not None before accessing their attributes

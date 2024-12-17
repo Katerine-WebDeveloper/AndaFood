@@ -31,28 +31,39 @@ export const MenuNavbar = (props) => {
   const handleCompra = async () => {
     if (listCart.length === 0) {
       alert("El carrito está vacío. Por favor, añade productos antes de pagar.");
-    } else {
-      setSpinner(true);
-      setTimeout(async () => {
-        setSpinner(false);
+      return;
+    }
   
-    const newOrders = listCart.map(item=>({
-      ...item,
+    setSpinner(true);
+    console.log("Contenido del carrito:", listCart);
+    const newOrders = listCart.map(item => ({
+      user_id: store?.user.id,
+      menu_id: item.isOption? null : item.id,
       cantidad: item.quantity,
-    }))
+      option_id: item.isOption? item.id : null,
+      total_price: item.newprice,
+    }));
 
-        // Llamar a createOrder con los datos necesarios, ya no se necesita store.user
-        const orderData = await actions.createListaDeOrden(newOrders);
+    
   
-        if (orderData) {
-          // Si la orden fue creada correctamente, puedes navegar a otra página
-          irAPayment();
-        } else {
-          alert("Hubo un problema al crear la orden.");
-        }
-      }, 2000);
+    try {
+      const success = await actions.createListaDeOrden(newOrders);
+  
+      if (success) {
+        clearCart(); // Vacía el carrito si se crea la orden
+        alert("¡Orden creada con éxito!");
+        navigate("/payment"); // Redirige a la página de pago
+      } else {
+        alert("Hubo un problema al crear la orden.");
+      }
+    } catch (error) {
+      console.error("Error al crear la orden:", error);
+      alert("Error al procesar la orden. Inténtalo nuevamente.");
+    } finally {
+      setSpinner(false);
     }
   };
+  
   
   
 
@@ -78,10 +89,11 @@ export const MenuNavbar = (props) => {
   };
   
 
-const clearCart = () => {
-  // Clear the cart by setting listCart to an empty array
-  setListCart([]);
-};
+  const clearCart = () => {
+    setListCart([]); // Vacía el carrito tras la compra
+    console.log("Carrito vacío.");
+  };
+  
 
   
   

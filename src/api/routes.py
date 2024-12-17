@@ -17,6 +17,7 @@ from flask_jwt_extended import jwt_required
 import cloudinary
 import cloudinary.uploader
 from cloudinary.utils import cloudinary_url
+from datetime import datetime
 
 from flask_cors import CORS
 
@@ -499,46 +500,42 @@ from flask_cors import cross_origin
 #         print(f"Error creating order: {str(e)}")
 #         return jsonify({"error": "An error occurred while creating the order"}), 500
 
+
 @api.route("/ordenes", methods=["POST"])
-@cross_origin(origins="*")
+# @cross_origin(origins="*")
 def create_order():
     try:
         data = request.get_json()
 
-        if not isinstance(data, list):  # Verificar si es un array
-            raise APIException("Expected a list of orders", status_code=400)
+        # if not isinstance(data, list):  # Verificar si es un array
+        #     raise APIException("Expected a list of orders", status_code=400)
 
-        created_orders = []
-        for order_data in data:
-            user_id = order_data.get("user_id")
-            menu_id = order_data.get("menu_id")
-            cantidad = order_data.get("cantidad", 1)
-            option_id = order_data.get("option_id")
+        user_id = data.get("user_id")
+        menu_id = data.get("menu_id")
+        cantidad = data.get("cantidad")
+        option_id = data.get("option_id")
+        total_price= data.get("total_price")
+        fecha_orden= data.get("fecha_orden")
 
             # Validate data
-            if not user_id or not menu_id or not cantidad or not option_id:
-                raise APIException("Missing required fields", status_code=400)
+        if not user_id or not cantidad:
+            raise APIException("Missing required fields", status_code=400)
 
-            user = User.query.get(user_id)
-            menu = Menu.query.get(menu_id)
-            menu_option = MenuOptions.query.get(option_id)
+          
+        nueva_orden = ListaDeOrdenes(
+            user_id=user_id,
+            menu_id=menu_id,
+            cantidad=cantidad,
+            option_id=option_id,
+            total_price=total_price,
+            fecha_orden=datetime.now()
+        )
 
-            if not user or not menu or not menu_option:
-                raise APIException("Invalid user, menu, or option", status_code=404)
-
-            # Create the new order
-            nueva_orden = ListaDeOrdenes(
-                user_id=user_id,
-                menu_id=menu_id,
-                cantidad=cantidad,
-                option_id=option_id
-            )
-            db.session.add(nueva_orden)
-            created_orders.append(nueva_orden)
-
+        db.session.add(nueva_orden)
+           
         db.session.commit()
 
-        return jsonify([order.serialize() for order in created_orders]), 201
+        return jsonify({"MSG": "Orden creada"}), 201
 
     except APIException as e:
         return jsonify({"error": e.message}), e.status_code
