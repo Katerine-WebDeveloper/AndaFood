@@ -16,6 +16,12 @@ from flask_jwt_extended import create_access_token
 from flask_jwt_extended import get_jwt_identity
 from flask_jwt_extended import jwt_required
 from flask_jwt_extended import JWTManager
+from flask_cors import CORS
+
+# Configurar CORS
+app = Flask(__name__)
+CORS(app, resources={r"/api/*": {"origins": "https://turbo-space-guide-q7947jp45gr4fxxq4-3000.app.github.dev"}})
+
 
 # from models import Person
 
@@ -74,7 +80,8 @@ def serve_any_other_file(path):
     response.cache_control.max_age = 0  # avoid cache memory
     return response
 
-
+with app.app_context():
+    db.create_all()
 
 # this only runs if `$ python src/main.py` is executed
 if __name__ == '__main__':

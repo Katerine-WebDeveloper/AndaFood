@@ -18,6 +18,8 @@ import {NewMenu} from "./pages/newMenu";
 import { NewOption } from "./pages/newOptions";
 import { SendEmail } from "./component/send-email";
 import { RecuperarPassword } from "./component/recuperar-password";
+import { PaymentCash} from "./component/finalPaymentProcess";
+
 import ProtectedRoute from "./component/protectedRoute.js";
 
 
@@ -52,6 +54,8 @@ const Layout = () => {
                         <Route element={<ProtectedRoute><NewMenu /></ProtectedRoute>} path="/newMenu" />
                         <Route element={<RecuperarPassword />} path="/recuperar-password" />
                         <Route element={<SendEmail />} path="/send-email" />
+                        {/* <Route element={<NewOption />} path="/newOptions" /> */}
+                        <Route element={<PaymentCash />} path="/finalPaymentProcess" />
                         <Route element={<ProtectedRoute><NewOption /></ProtectedRoute>} path="/newOptions" />
                         <Route element={<h1>Not found!</h1>} />
 

@@ -144,6 +144,39 @@ box-shadow: -1px 4px 17px 0px rgba(0,0,0,0.13);
 border-radius: 10px;
 }
 
+.notification {
+    background-color: rgb(56, 101, 229);
+    color: white;
+    padding: 10px;
+    border-radius: 10px;
+    position: fixed;
+    bottom: 20px; /* Cambiado de 'top' a 'bottom' */
+    right: 20px; /* Sigue manteniendo la posición derecha */
+    z-index: 1000;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Contenedor de la lista */
+.cart-list-container {
+    max-height: 300px; /* Ajusta la altura máxima del carrito */
+    overflow-y: auto; /* Habilita el scroll vertical */
+    margin-bottom: 60px; /* Asegura espacio para los botones */
+    padding: 10px; /* Añade espacio interno */
+    border: 1px solid #ddd; /* Opcional: bordes para separar visualmente */
+    border-radius: 10px;
+  }
+  
+  /* Botones fijos */
+  .btn-container {
+    position: sticky; /* Los botones siguen visibles al final */
+    bottom: 0; /* Pegados al fondo del contenedor padre */
+    background-color: white; /* Fondo para que se superpongan correctamente */
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid #ddd; /* Opcional: línea superior */
+  }
+  
 /* boton login */
 /* From Uiverse.io by catraco */ 
 .botonlogin {

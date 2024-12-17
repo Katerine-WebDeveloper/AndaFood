@@ -88,8 +88,8 @@ export const Register = () => {
             if (respLogin) {
                 navigate("/")
                 Swal.fire({
-                    icon: "Success",
-                    title: "Usuario registrado con exito",
+                    icon: "success",
+                    title: "Usuario registrado con éxito",
                     text: "Bienvenido",
         
                 });

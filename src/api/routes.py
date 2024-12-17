@@ -1,7 +1,6 @@
 from flask import Flask, request, jsonify, url_for, Blueprint
-from api.models import db, User, Menu, MenuOptions, Reserva
+from api.models import db, User, Menu, MenuOptions, Reserva, ListaDeOrdenes
 from api.utils import generate_sitemap, APIException
-from flask_cors import CORS
 import mercadopago
 import json
 import os
@@ -19,6 +18,13 @@ from flask_jwt_extended import jwt_required
 import cloudinary
 import cloudinary.uploader
 from cloudinary.utils import cloudinary_url
+from datetime import datetime
+
+from flask_cors import CORS
+
+app = Flask(__name__)
+CORS(app)
+
 
 
 
@@ -270,12 +276,7 @@ def get_option():
 
     option_list = [] 
     for item in options:
-        option_list.append({
-            "id": item.id,
-            "name": item.name,
-            "price": item.price,
-            "img": item.img
-        })
+        option_list.append(item.serialize())
 
     return jsonify(option_list), 200
 
@@ -283,15 +284,15 @@ def get_option():
 
 @api.route("/preference", methods=["POST"]) 
 def preference(): 
-    # body = json.loads(request.data)
-    # total = body["total"]
+    body = json.loads(request.data)
+    total = body["total"]
     # Crea un ítem en la preferencia
     preference_data = {
         "items": [
             {
-                "title": "Mi producto",
+                "title": "Anda Food",
                 "quantity": 1,
-                "unit_price": 75.76
+                "unit_price": total
             }
         ],
         "payer": {
@@ -301,9 +302,6 @@ def preference():
             "success": f"{frontendurl}/menu", 
             "failure": f"{frontendurl}/menu", 
             "pending": f"{frontendurl}/menu",
-            "success": f"{frontendurl}/menuoptions", 
-            "failure": f"{frontendurl}/menuoptions", 
-            "pending": f"{frontendurl}/menuoptions"
 
             # que url es la que va aca . o implementar backendurl
         },
@@ -478,3 +476,91 @@ def delete_reservation_by_email():
         db.session.rollback()
         return jsonify({"error": "Ha ocurrido un error durante la eliminación de las reservas", "detalles": str(e)}), 500
 
+# Lista de ordenes POST & GET
+
+from flask_cors import cross_origin
+
+
+@api.route("/ordenes", methods=["POST"])
+# @cross_origin(origins="*")
+def create_order():
+    try:
+        data = request.get_json()
+
+        # if not isinstance(data, list):  # Verificar si es un array
+        #     raise APIException("Expected a list of orders", status_code=400)
+
+        user_id = data.get("user_id")
+        menu_id = data.get("menu_id")
+        # menu_day = data.get("menu_day")
+        cantidad = data.get("cantidad")
+        option_id = data.get("option_id")
+        total_price= data.get("total_price")
+        fecha_orden= data.get("fecha_orden")
+
+            # Validate data
+        if not user_id or not cantidad:
+            raise APIException("Missing required fields", status_code=400)
+
+          
+        nueva_orden = ListaDeOrdenes(
+            user_id=user_id,
+            menu_id=menu_id,
+            # menu_day=menu_day,
+            cantidad=cantidad,
+            option_id=option_id,
+            total_price=total_price,
+            fecha_orden=datetime.now()
+        )
+
+        db.session.add(nueva_orden)
+           
+        db.session.commit()
+
+        return jsonify({"MSG": "Orden creada"}), 201
+
+    except APIException as e:
+        return jsonify({"error": e.message}), e.status_code
+    except Exception as e:
+        # Log the error for debugging
+        print(f"Error creating order: {str(e)}")
+        return jsonify({"error": "An error occurred while creating the orders"}), 500
+
+
+@api.route("/ordenes", methods=["GET"])
+@cross_origin(origins="*")  # Allow all origins for this route
+def get_orders():
+    # Obtener todas las órdenes de la base de datos
+    orders = ListaDeOrdenes.query.all()
+    
+    # Serializar las órdenes
+    serialized_orders = [order.serialize() for order in orders]
+    
+    return jsonify(serialized_orders), 200
+
+@api.route("/ordenes/<int:id>", methods=["GET"])
+@cross_origin(origins="*")  # Allow all origins for this route
+def get_order(id):
+    # Buscar la orden por ID
+    order = ListaDeOrdenes.query.get(id)
+
+    if order is None:
+        return jsonify({"message": "Orden no encontrada"}), 404
+    
+    # Responder con los detalles de la orden
+    return jsonify(order.serialize()), 200
+
+@api.route("/ordenes/<int:id>", methods=["DELETE"])
+@cross_origin(origins="*")  # Allow all origins for this route
+def delete_order(id):
+    # Buscar la orden por ID
+    order = ListaDeOrdenes.query.get(id)
+    
+    if order is None:
+        return jsonify({"message": "Orden no encontrada"}), 404
+    
+    # Eliminar la orden
+    db.session.delete(order)
+    db.session.commit()
+    
+    return jsonify({"message": "Orden eliminada exitosamente"}), 200

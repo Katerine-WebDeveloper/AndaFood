@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext, createContext } from "react";
 import { Context } from "../store/appContext";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
+import "../../styles/home.css";
 
 export const SelectedMenuData = createContext();
 
@@ -11,17 +12,54 @@ export const CardMenu = ({ menu }) => {
 
     const { listCart, setListCart } = useContext(SelectedMenuData);
 
+    const [showNotification, setShowNotification] = useState(false);
+
     const handleClick = (menu) => {
-        setSelectedMenu(menu);
-        setListCart([...listCart, menu]);
+        // Crear un ID único basado en el ID y el source
+        const uniqueId = `${menu.id}-${menu.source}`;
+      
+        // Verifica si el artículo ya está en el carrito usando el uniqueId
+        const existingItemIndex = listCart.findIndex(item => item.uniqueId === uniqueId);
+      
+        if (existingItemIndex === -1) {
+          // Si el artículo no está en el carrito, lo agregamos con cantidad 1
+          setListCart([
+            ...listCart,
+            { ...menu, quantity: 1, newprice: menu.price, uniqueId } // Agregamos el uniqueId al objeto
+          ]);
+        } else {
+          // Si el artículo ya está en el carrito, actualizamos la cantidad y el precio
+          const updatedCart = listCart.map((item) => {
+            if (item.uniqueId === uniqueId) {
+              return {
+                ...item,
+                quantity: item.quantity + 1,
+                newprice: (item.quantity + 1) * item.price
+              };
+            }
+            return item;
+          });
+      
+          // Actualizamos el carrito con los valores modificados
+          setListCart(updatedCart);
+        }
+      
         console.log("Item seleccionado: ", menu);
-    };
+      };
+      
+      
+    
 
     const handleNotificacion = () => {
-        alert("¡Producto agregado!");
+        if (!showNotification) {
+            console.log("Mostrando notificación...");
+            setShowNotification(true);
+            setTimeout(() => {
+              console.log("Ocultando notificación...");
+              setShowNotification(false);
+            }, 700);
+          }
     };
-
-
 
     const navigate = useNavigate();
 
@@ -112,6 +150,14 @@ export const CardMenu = ({ menu }) => {
                     >
                         ${menu.price}
                     </div>
+
+                    {/* Renderizado de notificación */}
+                    {showNotification && (
+                        <div className="notification">
+                            ¡Producto añadido al carrito!
+                        </div>
+                    )}
+
                     <div className="card-body text-center p-1">
                         <div className="d-flex justify-content-between">
                             <button

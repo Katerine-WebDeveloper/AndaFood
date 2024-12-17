@@ -1,66 +1,40 @@
-import React, { useState, useContext, useEffect } from "react"
-import andalogofood from "../../img/anda.png";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import axios from "axios";
 import { Link } from "react-router-dom";
-import { initMercadoPago, Wallet } from '@mercadopago/sdk-react'
-import { Context } from "../store/appContext";
-import axios from 'axios';
 
-
-export const Payment = () => {
-
-    let total = 0
-     
-    const { actions, store } = useContext(Context);
-
+export const PaymentCash = () => {
     const [orders, setOrders] = useState([]);
-
-    const navigate = useNavigate();
-
-    const pagarEnEfectivo = () => {
-        navigate("/finalPaymentProcess"); // Redirige a la página de pago en efectivo
-    };
-    
-
-    initMercadoPago('APP_USR-95548522-114d-4404-9dfd-408bd646ee05', { locale: "es-UY", });
-    const [preferenceId, setPreferenceId] = useState(null)
-
-
-    const pagar = async () => {
-        // const subtotal = 100; 
-        const initPoint = await actions.pagoMercadoPago(total);
-        if (initPoint) {
-            let url = store.mercadoPago.init_point
-            window.location.href = url; // Redirige al cliente
-        }
-    };
+    const { orderId } = useParams(); // Obtén el ID de la orden desde la URL
 
     useEffect(() => {
-        // Llamada GET para obtener las órdenes
-        const fetchOrders = async () => {
+        // Llamada GET para obtener los detalles del pedido utilizando el ID de la orden
+        const fetchOrder = async () => {
             try {
-                const response = await axios.get(process.env.BACKEND_URL + '/api/ordenes');  // Asegúrate de que esta ruta sea la correcta
-                setOrders(response.data);  // Suponiendo que la respuesta es un arreglo de órdenes
+                const response = await axios.get(process.env.BACKEND_URL + `/api/ordenes/`);
+                console.log("Respuesta de la API:", response.data);
+                setOrders(response.data);  // Suponiendo que la respuesta es un solo objeto de orden
             } catch (error) {
-                console.error('Error fetching orders:', error);
+                console.error("Error al obtener el pedido:", error);
             }
         };
 
-        fetchOrders();
-    }, []);
-
-    // const handleCompra = async () => { const id = await createPreference(); if (id) { setPreferenceId(id); } }; 
+        fetchOrder();
+    }, []); // Vuelve a llamar cuando el orderId cambie
 
     return (
         <div className="container my-5">
             <div className="row justify-content-center">
                 {/* Título de la sección */}
                 <div className="col-12 text-center mb-4">
-                    <h1 className="text-primary">Lista de Ordenes</h1>
-                    <p className="text-muted">Revisa los detalles de tu pedido antes de proceder con el pago</p>
+                    <h1 className="text-primary">¡Pedido Recibido!</h1>
+                    <p className="text-muted">Tu pedido ha sido recibido con éxito.</p><br /> 
+                    <p>Abonarás al retirar.</p><br /> 
+                    <p>Muchas gracias.</p>
                 </div>
 
-                {/* Lista de Ordenes */}
+                {/* Detalles del pedido */}
+
                 <div className="col-12 col-md-8">
                     <div className="list-group">
                         {orders.length > 0 ? (
@@ -99,7 +73,6 @@ export const Payment = () => {
                                     <span className="badge bg-success text-white">
                                         ${order.total_price}
                                     </span>
-                                   <span className="visually-hidden"> {total = total + parseInt(order.total_price)} </span>
                                 </div>
                             ))
                         ) : (
@@ -109,22 +82,16 @@ export const Payment = () => {
                         )}
                     </div>
 
-                    <p className="text-end">Total: ${total}</p>
-
                 </div>
 
-                {/* Opciones de pago */}
+                {/* Botones de navegación */}
                 <div className="col-12 col-md-8 text-center mt-5">
-                    <h2 className="text-primary mb-4">Elige tu forma de pago</h2>
-                    <button onClick={pagar} className="btn btn-success btn-lg mb-3 w-100">
-                        Pagar con Mercado Pago
-                    </button>
-                    <button className="btn btn-secondary btn-lg w-100" onClick={pagarEnEfectivo}>
-                        Pagar en Caja al Retirar
-                    </button>
+                    <h2 className="text-primary mb-4">¿Qué deseas hacer ahora?</h2>
+                    <Link to="/menu" className="btn btn-primary btn-lg mb-3 w-100">
+                        Volver al Inicio
+                    </Link>
                 </div>
             </div>
         </div>
     );
-
 };

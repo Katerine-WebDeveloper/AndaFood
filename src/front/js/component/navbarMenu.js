@@ -2,8 +2,11 @@ import React, { useState, useEffect, useContext, useActionState } from "react";
 import andalogofood from "../../img/anda.webp";
 import userlogo from "../../img/user.webp";
 
+import "../../styles/home.css";
+
 import { Link } from 'react-router-dom';
 import { SelectedMenuData } from "./cardMenu";
+import { SelectedOptionData } from "./cardOptions"; 
 import { useNavigate } from "react-router-dom";
 import { Context } from "../store/appContext";
 
@@ -13,9 +16,12 @@ export const MenuNavbar = (props) => {
   const [spinner, setSpinner] = useState(false);
   const { actions, store } = useContext(Context)
   const navigate = useNavigate();
-  const { listCart } = useContext(SelectedMenuData);
-
-
+  const { listCart, setListCart } = useContext(SelectedMenuData);
+  const logout = () => {
+    localStorage.removeItem("access_token");
+    setStore({ user: null, token: null, auth: false });
+    console.log("Sesión cerrada");
+  };
 
   const handleLogout = () => {
     actions.logout();
@@ -25,18 +31,70 @@ export const MenuNavbar = (props) => {
   const handleCompra = async () => {
     if (listCart.length === 0) {
       alert("El carrito está vacío. Por favor, añade productos antes de pagar.");
-    } else {
-      setSpinner(true)
-      setTimeout(() => {
-        setSpinner(false)
-        irAPayment();
-      }, 2000)
+      return;
+    }
+  
+    setSpinner(true);
+    console.log("Contenido del carrito:", listCart);
+    const newOrders = listCart.map(item => ({
+      user_id: store?.user.id,
+      menu_id: item.isOption? null : item.id,
+      cantidad: item.quantity,
+      option_id: item.isOption? item.id : null,
+      total_price: item.newprice,
+    }));
+
+    
+  
+    try {
+      const success = await actions.createListaDeOrden(newOrders);
+  
+      if (success) {
+        clearCart(); // Vacía el carrito si se crea la orden
+        alert("¡Orden creada con éxito!");
+        navigate("/payment"); // Redirige a la página de pago
+      } else {
+        alert("Hubo un problema al crear la orden.");
+      }
+    } catch (error) {
+      console.error("Error al crear la orden:", error);
+      alert("Error al procesar la orden. Inténtalo nuevamente.");
+    } finally {
+      setSpinner(false);
     }
   };
+
 
   const irAPayment = () => {
     navigate("/payment");
   };
+
+  const updateCantidad = (index, action) => {
+    const updatedCart = listCart.map((item, idx) => {
+      if (idx === index) {
+        const newQuantity = action === "aumentar" ? item.quantity + 1 : item.quantity - 1;
+        return {
+          ...item,
+          quantity: Math.max(1, newQuantity), // No permitir menos de 1
+          newprice: Math.max(1, newQuantity) * item.price,
+        };
+      }
+      return item;
+    }).filter(item => item.quantity >= 0); // Eliminar elementos con cantidad <= 0
+  
+    setListCart(updatedCart);
+    console.log("Updated cart:", updatedCart);
+  };
+  
+
+  const clearCart = () => {
+    setListCart([]); // Vacía el carrito tras la compra
+    console.log("Carrito vacío.");
+  };
+  
+
+  
+  
 
   return (
     <nav className="navbar bg-body-tertiary">
@@ -138,22 +196,14 @@ export const MenuNavbar = (props) => {
             <div
               className="listCart offcanvas-body position-relative"
             >
-              {props.spinner && (
-                <div
-                  className="spinner-grow d-flex justify-content-center"
-                  role="status"
-                  style={{ backgroundColor: "#3865e5" }}
-                >
-                  <span className="visually-hidden">Loading...</span>
-                </div>
-              )}
-
+              
+              <div className="cart-list-container">
               {listCart.length === 0 ? (
                 <p>El carrito está vacío.</p>
               ) : (
                 listCart.map((item, index) => (
                   <div
-                    key={item.id}
+                    key={`${item.id}-${index}`}
                     className="d-flex align-items justify-content-evenly"
                     style={{ backgroundColor: "white" }}
                   >
@@ -169,22 +219,23 @@ export const MenuNavbar = (props) => {
                     </div>
 
                     <div
-                      className="foodName d-flex justify-content-center align-items-center"
+                      className="foodName d-flex justify-content-center align-items-center ms-3"
                       style={{ color: "#3865e5" }}
                     >
                       {item.name}
                     </div>
 
                     <div
-                      className="precioTotal d-flex justify-content-center align-items-center"
+                      className="precioTotal d-flex justify-content-center align-items-center ms-2"
                       style={{ color: "#3865e5" }}
                     >
-                      {item.price}
+                      ${item.newprice}
                     </div>
 
                     <div className="cantidad d-flex justify-content-center align-items-center">
-                      <span
+                      <button
                         className="menos"
+                        onClick={() => updateCantidad(index, "decrecer")}
                         style={{
                           width: "30px",
                           height: "30px",
@@ -197,10 +248,11 @@ export const MenuNavbar = (props) => {
                         }}
                       >
                         {"<"}
-                      </span>
-                      <span className="text-center">1</span>
-                      <span
+                      </button>
+                      <span className="text-center">{item.quantity}</span>
+                      <button
                         className="mas"
+                        onClick={() => updateCantidad(index, "aumentar")}
                         style={{
                           width: "30px",
                           height: "30px",
@@ -213,13 +265,14 @@ export const MenuNavbar = (props) => {
                         }}
                       >
                         {">"}
-                      </span>
+                      </button>
                     </div>
                   </div>
                 ))
               )}
+              </div>
 
-              <div className="btn position-absolute bottom-0 start-0 end-0 d-flex justify-content-between">
+              <div className="btn-container btn position-absolute bottom-0 start-0 end-0 d-flex justify-content-between">
                 <button
                   type="button"
                   className="close align-self-start"
@@ -228,6 +281,16 @@ export const MenuNavbar = (props) => {
                 >
                   VOLVER
                 </button>
+
+                <button
+                  className="clear-cart align-self-center text-light btn-danger"
+                  onClick={clearCart}
+                  style={{ backgroundColor: "red", borderRadius: "10px" }}
+                >
+                  LIMPIAR CARRITO
+                </button>
+
+
                 <button
                   className="pay align-self-end text-light btn-success"
                   id="process-checkout"
@@ -236,11 +299,21 @@ export const MenuNavbar = (props) => {
                   IR A PAGAR
                 </button>
               </div>
+
             </div>
           </div>
 
 
         </div>
+        {props.spinner && (
+                <div
+                  className="spinner-grow d-flex justify-content-center"
+                  role="status"
+                  style={{ backgroundColor: "#3865e5" }}
+                >
+                  <span className="visually-hidden">Loading...</span>
+                </div>
+              )}
       </div>
     </nav>
   )
