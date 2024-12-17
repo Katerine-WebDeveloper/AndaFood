@@ -451,9 +451,10 @@ def get_allReservations():
 
 # Endpoint para borrar reservas de un usuario
 @api.route('/reservations', methods=['DELETE'])
+@jwt_required()
 def delete_reservation_by_email():
     # Obtener el email desde los parámetros de la solicitud
-    email = request.json.get('email')
+    email = get_jwt_identity()
 
     if not email:
         return jsonify({"error": "Email is required"}), 400

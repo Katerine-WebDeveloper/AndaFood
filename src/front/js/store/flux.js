@@ -14,7 +14,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			menuViernes: [],
 			menuSabado: [],
 			menuOptions: [],
-			reservas: [],
+			reservas: {},
 			listaDeOrdenes: [],
 
 		},
@@ -211,12 +211,12 @@ const getState = ({ getStore, getActions, setStore }) => {
 						},
 						body: JSON.stringify(
 							{
-								lunes: reservas["Lunes"] || "",
-								martes: reservas["Martes"] || "",
-								miercoles: reservas["Miercoles"] || "",
-								jueves: reservas["Jueves"] || "",
-								viernes: reservas["Viernes"] || "",
-								sabado: reservas["Sabado"] || "",
+								lunes: reservas["lunes"] || "",
+								martes: reservas["martes"] || "",
+								miercoles: reservas["miercoles"] || "",
+								jueves: reservas["jueves"] || "",
+								viernes: reservas["viernes"] || "",
+								sabado: reservas["sabado"] || "",
 							}
 
 						),
@@ -439,6 +439,28 @@ const getState = ({ getStore, getActions, setStore }) => {
 				  return false;
 				}
 			  },
+
+			  eliminarReserva: async () => {
+				try {
+					const token = localStorage.getItem("access_token");
+					const response = await fetch(process.env.BACKEND_URL + "api/reservations", {
+						method: "DELETE",
+						headers: {
+							"Content-Type": "application/json",
+							"Authorization": "Bearer " + token
+						},
+
+					});
+					console.log(response);
+					if (response.status == 200) {
+						getActions().traerReserva()
+						return true;
+					}
+				} catch (error) {
+					console.error("Error al eliminar reservas:", error);
+					return false
+				}
+			},
 				  
 			
 			
