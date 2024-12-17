@@ -322,6 +322,7 @@ def register():
     email = data.get("email")
     password = data.get("password")
     num_funcionario=data.get("num_funcionario")
+    is_admin=data.get("is_admin",False)
 
     exist_user = User.query.filter_by(email=email).first()
     if exist_user:
@@ -331,7 +332,9 @@ def register():
         email = email ,
         last_name=last_name,
         password = password ,
-        num_funcionario = num_funcionario
+        num_funcionario = num_funcionario,
+        is_admin=is_admin
+
     )
     db.session.add(new_user)
     db.session.commit()
