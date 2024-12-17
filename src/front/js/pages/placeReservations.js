@@ -83,10 +83,10 @@ export const PlaceReservations = () => {
 
     return (
         <>
-  
-        <div className="d-flex flex-column align-items-center mt-4 reserva" style={{ marginBottom: "20px", fontFamily: "Mulish, sans-serif" }}>
-         
-            <div className="d-flex mb-4">
+        <Navbar/>
+        <div className="d-flex flex-column align-items-center mt-5 reserva" style={{ marginBottom: "20px", fontFamily: "Mulish, sans-serif" }}>
+            
+            <div className="d-flex mt-5 mb-2">
                 <button className="btn btn-white" style={{ padding: '10px', marginLeft: '10px', marginRight: '30px', cursor: 'pointer', borderRadius: '25px', borderColor: 'gray', backgroundColor: "rgba(56, 101, 229, 0.2)" }}
                     title="Volver al menú"
                     onClick={volver}
@@ -99,7 +99,7 @@ export const PlaceReservations = () => {
                 <h2 className="text-center" style={{ color: "rgb(56, 101, 229)" }}>RESERVAR LUGAR EN COMEDOR</h2>
             </div>
 
-            <div className="col-6 d-flex flex-wrap justify-content-center gap-3 mt-5">
+            <div className="col-10 d-flex flex-wrap justify-content-center gap-3 mt-3">
                 {diasSemana.map((dia, index) => (
                     <PlaceReservationCard
                         key={index}
@@ -118,7 +118,7 @@ export const PlaceReservations = () => {
                 ))}
             </div>
 
-            <div className="container d-flex justify-content-center mx-auto my-3">
+            <div className="container d-flex justify-content-center mx-auto mt-3">
                 <button className="btn btn-dark" style={{ width: "20rem", padding: '10px', marginLeft: '7px', marginRight: '7px', cursor: 'pointer', borderRadius: '25px' }}
                     title="Eliminar reserva"
                     onClick={() => eliminarReservas()}
