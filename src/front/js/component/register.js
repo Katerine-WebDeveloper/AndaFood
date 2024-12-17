@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 import { useNavigate } from 'react-router-dom';
 import userRegisterImage from "../../img/user.webp";
 import Swal from 'sweetalert2'
-import { Navbar } from "../component/loginnavbar"
 
 export const Register = () => {
 
@@ -22,12 +21,10 @@ export const Register = () => {
     const [confirmar, setConfirmar] = useState("")
     const [shown, setShown] = useState(false);
     const switchShown = () => setShown(!shown);
-    const [isAdmin, setIsAdmin] = useState(false);
-
     const mensaje = (titulo) => {
         Swal.fire({
-            icon: "error",
-            title: "error de ingreso",
+            icon: "Error",
+            title: "Error de ingreso",
             text: titulo,
 
         });
@@ -37,7 +34,7 @@ export const Register = () => {
 
     const signup = async (e) => {
         e.preventDefault()
-
+        
         if (name == "") {
             mensaje("Falta ingresar el nombre")
             return
@@ -57,9 +54,9 @@ export const Register = () => {
             mensaje("Falta ingresar el contraseña")
             return
         }
-        if (password.length > 20 || password.length < 8) {
+        if (password.length >20 || password.length<8){
             mensaje("El password debe contenter de 8 a 20 caracteres")
-            return
+            return 
 
         }
         if (confirmar == "") {
@@ -75,39 +72,28 @@ export const Register = () => {
             last_name: last_name,
             num_funcionario: num_funcionario,
             email: email,
-            password: password,
-            is_admin: isAdmin
-        }
-        // nuevo dato del nuevo usuario
-        let resp = await actions.signup(newUser)
+            password: password
 
+        }
+        let resp = await actions.signup(newUser)
+       
         if (resp) {
             let userLogin = {
                 email: email,
                 password: password
 
             }
-
-            let respLogin = await actions.login(userLogin);
-
-            if (respLogin ==!isAdmin ) {
-                navigate("/menu");
+            
+            let respLogin = await actions.login(userLogin)
+            if (respLogin) {
+                navigate("/")
                 Swal.fire({
-                    icon: "success",
-                    title: "Usuario registrado con éxito",
+                    icon: "Success",
+                    title: "Usuario registrado con exito",
                     text: "Bienvenido",
-                });
-            } else {
-                navigate("/admin");
-                Swal.fire({
-                    icon: "success",
-                    title: "Inicio de sesión exitoso",
-                    text: "Bienvenido al menú",
+        
                 });
             }
-
-
-
 
         }
     }
@@ -156,20 +142,6 @@ export const Register = () => {
                         {shown ? <i className="fa fa-eye-slash"></i> : <i className="fa fa-eye"></i>}
                     </button>
                 </div>
-                <div className="form-check form-switch">
-                    <input
-                        className="form-check-input"
-                        type="checkbox"
-                        role="switch"
-                        id="flexSwitchCheckDefault"
-                        onChange={() => setIsAdmin(!isAdmin)} 
-                        checked={isAdmin} 
-                       
-                    />
-                    <label className="form-check-label" htmlFor="flexSwitchCheckDefault">
-                        Soy Administrador
-                    </label>
-                </div>
             </div>
             <div className="text-center mb-4">
                 <button type="button" onClick={(event) => signup(event)} className="btn btn-primary m-2">Registrarse</button>
@@ -181,3 +153,4 @@ export const Register = () => {
         </div>
     )
 }
+

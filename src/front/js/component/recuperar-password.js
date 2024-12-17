@@ -36,10 +36,18 @@ export const RecuperarPassword = () => {
             mensaje("Ingrese su nueva contraseña")
             return
         }
-        let resp=await actions.recuperarPassword(email,aleatoria,nueva)
+        let resp=await actions.recuperarPassword(email,nueva,aleatoria)
             if (resp){
                 mensaje("Contraseña actualizada con exito","success", "Ya tienes tu contraseña")
-                return
+                let user={
+                    email:email,
+                    password:nueva
+                }
+                let respLogin=actions.login(user)
+                if(respLogin){
+                    navigate("/menu")
+                }
+            
             }
 
     }
@@ -80,4 +88,5 @@ export const RecuperarPassword = () => {
         </div>
     );
 };
+
 

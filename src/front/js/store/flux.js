@@ -19,14 +19,14 @@ const getState = ({ getStore, getActions, setStore }) => {
 			optionAgua: [],
 			optionNaranja: [],
 			optionManzana: [],
-			reservas: {}
+			reservas: []
 
 		},
 		actions: {
 			// Use getActions to call a function within a function
 			pagoMercadoPago: async (total) => {
 				try {
-					const response = await fetch(process.env.BACKEND_URL + "api/preference", {
+					const response = await fetch("https://crispy-rotary-phone-x59p57vpggwjfv5x5-3001.app.github.dev/api/preference", {
 						method: "POST",
 						headers: { "Content-Type": "application/json" },
 						body: JSON.stringify({ total: total })
@@ -170,9 +170,11 @@ const getState = ({ getStore, getActions, setStore }) => {
 					console.error("Error al obtener opciones:", error);
 				}
 			},
+			
+
+
 
 			guardarReserva: async (reservas) => {
-				console.log(reservas)
 				try {
 					const token = localStorage.getItem("access_token");
 					const response = await fetch(process.env.BACKEND_URL + "api/reservations", {
@@ -183,12 +185,12 @@ const getState = ({ getStore, getActions, setStore }) => {
 						},
 						body: JSON.stringify(
 							{
-								lunes: reservas["lunes"] || "",
-								martes: reservas["martes"] || "",
-								miercoles: reservas["miercoles"] || "",
-								jueves: reservas["jueves"] || "",
-								viernes: reservas["viernes"] || "",
-								sabado: reservas["sabado"] || "",
+								lunes: reservas["Lunes"] || "",
+								martes: reservas["Martes"] || "",
+								miercoles: reservas["Miercoles"] || "",
+								jueves: reservas["Jueves"] || "",
+								viernes: reservas["Viernes"] || "",
+								sabado: reservas["Sabado"] || "",
 							}
 
 						),
@@ -218,6 +220,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					console.log(response);
 					if (response.status == 200) {
 						const data = await response.json();
+						console.log("Reservas", data);
 						setStore({ reservas: data });
 						return true;
 					} else {
@@ -230,34 +233,11 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			},
 
-			
-			eliminarReserva: async () => {
-				try {
-					const token = localStorage.getItem("access_token");
-					const response = await fetch(process.env.BACKEND_URL + "api/reservations", {
-						method: "DELETE",
-						headers: {
-							"Content-Type": "application/json",
-							"Authorization": "Bearer " + token
-						},
-
-					});
-					console.log(response);
-					if (response.status == 200) {
-						getActions().traerReserva()
-						return true;
-					}
-				} catch (error) {
-					console.error("Error al eliminar reservas:", error);
-					return false
-				}
-			},
-
 			restablecerPassword: async (email) => {
 				try {
 
 					const response = await fetch(process.env.BACKEND_URL + "api/send-email", {
-						method: "POST",
+						method: "PUT",
 						headers: { "Content-Type": "application/json" },
 						body: JSON.stringify({
 							email: email
@@ -276,16 +256,18 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 
 			},
-			recuperarPassword: async (email, aleatorio, password) => {
+			recuperarPassword: async (email,nueva,aleatoria) => {
+				console.log(email,nueva,aleatoria)
 				try {
 
 					const response = await fetch(process.env.BACKEND_URL + "api/recuperar-password", {
-						method: "POST",
+						method: "PUT",
 						headers: { "Content-Type": "application/json" },
 						body: JSON.stringify({
 							email,
-							aleatorio,
-							password
+							nueva,
+							aleatoria
+						
 						}),
 					});
 					console.log(response);

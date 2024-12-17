@@ -5,7 +5,8 @@ from flask_cors import CORS
 import mercadopago
 import json
 import os
-
+import random
+import string
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
@@ -23,7 +24,7 @@ from cloudinary.utils import cloudinary_url
 
 sdk = mercadopago.SDK("APP_USR-7717264634749554-120508-c40d3f9932b4e9f7de4477bfa5ef733b-2136972767")
 
-aleatorio="cucaracha"
+
 
 frontendurl = os.getenv("FRONTEND_URL")
 
@@ -41,6 +42,7 @@ CORS(api)
 
 # Email Sender
 
+aleatorio=""
 sender_email = os.getenv("SMTP_USERNAME")
 sender_password = os.getenv("SMTP_APP_PASSWORD")
 smtp_host = os.getenv("SMTP_HOST")
@@ -75,13 +77,35 @@ def send_singup_email(receivers_email):
    server.sendmail(sender_email, receivers_email, message.as_string())
    server.quit()
 
-@api.route('/send-email', methods=['POST'])
+   
+def generate_random_password(length=10):
+  
+  chars = string.ascii_letters + string.digits + string.punctuation
+ 
+  password = ''.join(random.choice(chars) for _ in range(length))
+  return password
+
+
+
+
+@api.route('/send-email', methods=['PUT'])
 def send_email():
    data=request.json
    receivers_email=data["email"]
+   user_random_password=generate_random_password()
+    
    exist_user=User.query.filter_by(email=receivers_email).first()
+   
+   if receivers_email is None :
+       return jsonify({"msg":"Falta ingresar email"}),404
+    
    if exist_user is None :
-       return jsonify({"msg":"usuario no registrado"}),404
+       return jsonify({"msg":"Usuario no registrado"}),404
+    
+    # if user_random_password==aleatorio:
+   exist_user.password=user_random_password
+   db.session.commit()
+ 
 
    message = MIMEMultipart("alternative")
 
@@ -95,7 +119,7 @@ def send_email():
            <body>
                <h1>Bienvenido a Anda Food!</h1>
                <p>¿Olvidaste la contraseña?</p>
-               <p>Tu password aleatorio es :{aleatorio}.</p>
+               <p>Tu password aleatorio es : {user_random_password}.</p>
                <p>Recuerda volver a la aplicacion web para continuar el cambio de contraseña</p>
            </body>
        </html>
@@ -114,25 +138,31 @@ def send_email():
    return jsonify({"msg": "Correo enviado correctamente"}), 200
 
 
-@api.route('/recuperar-password', methods=['POST'])
+@api.route('/recuperar-password', methods=['PUT'])
 def recuperar_password():
     data=request.json
     email=data.get("email")
-    new_password=data.get("password")
-    user_aleatorio=data.get("aleatorio")
+    nueva=data.get("nueva")
+    aleatoria=data.get("aleatoria")
+   
     exist_user=User.query.filter_by(email=email).first()
    
-    if email is None :
-       return jsonify({"msg":"email no registrado"}),404
+    # if email is None :
+    #    return jsonify({"msg":"Falta ingresar email"}),404
     
     if exist_user is None :
-       return jsonify({"msg":"usuario no registrado"}),404
+       return jsonify({"msg":"Usuario no registrado"}),401
     
-    if user_aleatorio==aleatorio:
-       exist_user.password=new_password
-       db.session.commit()
-       return jsonify({"msg":"contraseña actualizada con exito"}),200
-    return jsonify({"msg":"paso algo inesperado"}),500
+    print(exist_user.password,aleatoria)
+
+    if exist_user.password != aleatoria:
+        return jsonify({"msg":"El password enviado no coincide"}),403
+    
+    # if user_random_password==aleatorio:
+    exist_user.password=nueva
+    db.session.commit()
+    return jsonify({"msg":"Contraseña actualizada con exito"}),200
+    # return jsonify({"msg":"Paso algo inesperado"}),500
 
 
 
@@ -294,7 +324,6 @@ def register():
     email = data.get("email")
     password = data.get("password")
     num_funcionario=data.get("num_funcionario")
-    is_admin=data.get("is_admin", False) #recibe los datos del post, get
 
     exist_user = User.query.filter_by(email=email).first()
     if exist_user:
@@ -304,8 +333,7 @@ def register():
         email = email ,
         last_name=last_name,
         password = password ,
-        num_funcionario = num_funcionario,
-        is_admin= is_admin #asignando valor 
+        num_funcionario = num_funcionario
     )
     db.session.add(new_user)
     db.session.commit()
@@ -425,10 +453,9 @@ def get_allReservations():
 
 # Endpoint para borrar reservas de un usuario
 @api.route('/reservations', methods=['DELETE'])
-@jwt_required()
 def delete_reservation_by_email():
     # Obtener el email desde los parámetros de la solicitud
-    email = get_jwt_identity()
+    email = request.json.get('email')
 
     if not email:
         return jsonify({"error": "Email is required"}), 400
