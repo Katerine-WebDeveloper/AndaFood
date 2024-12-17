@@ -23,8 +23,8 @@ export const Register = () => {
     const switchShown = () => setShown(!shown);
     const mensaje = (titulo) => {
         Swal.fire({
-            icon: "error",
-            title: "error de ingreso",
+            icon: "Error",
+            title: "Error de ingreso",
             text: titulo,
 
         });
@@ -86,7 +86,7 @@ export const Register = () => {
             
             let respLogin = await actions.login(userLogin)
             if (respLogin) {
-                navigate("/menu")
+                navigate("/")
                 Swal.fire({
                     icon: "success",
                     title: "Usuario registrado con éxito",
@@ -153,3 +153,4 @@ export const Register = () => {
         </div>
     )
 }
+

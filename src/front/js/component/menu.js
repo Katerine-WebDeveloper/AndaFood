@@ -25,7 +25,7 @@ export const Menu = () => {
 
   useEffect(() => {
     const carritoGuardado = JSON.parse(localStorage.getItem("listCart"));
-    
+
     // Validate if the stored cart data is correct
     if (carritoGuardado && Array.isArray(carritoGuardado)) {
       setListCart(carritoGuardado);
@@ -34,14 +34,14 @@ export const Menu = () => {
       setListCart([]);
     }
   }, []);
-  
+
   useEffect(() => {
     // Only update localStorage if the listCart has valid data
     if (listCart && Array.isArray(listCart)) {
       localStorage.setItem("listCart", JSON.stringify(listCart));
     }
   }, [listCart]);
-  
+
 
   const decrecer = () => { };
 
@@ -70,6 +70,24 @@ export const Menu = () => {
             <h2 className="text-center" style={{ color: "rgb(56, 101, 229)", padding: "20px" }}>
               <i className="fa-solid fa-calendar-days"></i> MENÚ SEMANAL
             </h2>
+            {store.user?.is_admin && (
+              <div className="text-end mb-3">
+                <button
+                  className="btn btn-danger m-2"
+                  type="button"
+                  onClick={() => navigate("/newMenu")}
+                >
+                  <i class="fa-solid fa-bowl-food"></i> Volver a Nuevo Menú
+                </button>
+                <button
+                  className="btn btn-danger"
+                  type="button"
+                  onClick={() => navigate("/newOptions")}
+                >
+                  <i class="fa-solid fa-bowl-food"></i> Volver a Otras opciones
+                </button>
+              </div>
+            )}
             <div className="row">
               {["Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado"].map((day) => (
                 <div
@@ -89,9 +107,9 @@ export const Menu = () => {
                       <CardMenu key={menu.id} menu={menu} />
                     ))}
                   </div>
-                </div>
+                  </div>
               ))}
-            </div>
+                </div>
 
             {/* <div className="container my-4">
             <h1 className="text-center mb-2" style={{ fontFamily: "Mulish, sans-serif", color: "rgb(56, 101, 229)" }}>
@@ -117,7 +135,7 @@ export const Menu = () => {
             </div>
           </div> */}
 
-<div className="container my-4">
+                < div className = "container my-4" >
   <h1 className="text-center mb-2" style={{ fontFamily: "Mulish, sans-serif", color: "rgb(56, 101, 229)" }}>
     OTRAS OPCIONES
   </h1>

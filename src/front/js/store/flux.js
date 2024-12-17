@@ -263,7 +263,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				try {
 
 					const response = await fetch(process.env.BACKEND_URL + "api/send-email", {
-						method: "POST",
+						method: "PUT",
 						headers: { "Content-Type": "application/json" },
 						body: JSON.stringify({
 							email: email
@@ -282,16 +282,18 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 
 			},
-			recuperarPassword: async (email, aleatorio, password) => {
+			recuperarPassword: async (email,nueva,aleatoria) => {
+				console.log(email,nueva,aleatoria)
 				try {
 
 					const response = await fetch(process.env.BACKEND_URL + "api/recuperar-password", {
-						method: "POST",
+						method: "PUT",
 						headers: { "Content-Type": "application/json" },
 						body: JSON.stringify({
 							email,
-							aleatorio,
-							password
+							nueva,
+							aleatoria
+						
 						}),
 					});
 					console.log(response);

@@ -132,6 +132,7 @@ export const CardOption = ({ option }) => {
               <i className="fa-solid fa-cart-shopping"></i>
             </button>
             </div>
+<<<<<<< HEAD
 
             
              {/* Renderizado de notificación */}
@@ -142,6 +143,10 @@ export const CardOption = ({ option }) => {
                     )}
 
         </div>
+=======
+            
+          </div>
+>>>>>>> 8670901220e729bc2f8098918f1546ba601fa0b3
     </div>
   );
 };  

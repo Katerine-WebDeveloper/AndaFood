@@ -93,10 +93,8 @@ export const CardMenu = ({ menu }) => {
             setShowModal(!showModal);
         };
 
-    
-
     return (
-        <div key={menu.id} className="col-12 col-md-6 col-lg-4 mb-3">
+        <div key={menu.id} className="col-12 col-md-6 col-lg-3 mb-3">
             <div
                 className="card mx-auto"
                 style={{
@@ -236,7 +234,7 @@ export const CardMenu = ({ menu }) => {
                             <div>
                                 <h5>{menu.name}</h5>
                                 <p>Precio: ${menu.price}</p>
-                                <p>Descripción: {menu.description}</p>
+                                <p> {menu.description}</p>
                                 <div className="d-flex align-items-center" style={{ gap: "10px" }}>
                                     <div>{starElements}</div>
                                 </div>

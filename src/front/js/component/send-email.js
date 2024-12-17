@@ -49,9 +49,12 @@ export const SendEmail = () => {
                 </div>
 
                 <div className="text-center">
-                    <button type="button" onClick={(e) => envio(e)} className="btn btn-primary">
+                    
+                    <button type="button" onClick={(e) => envio(e)} className="btn btn-primary"><Link className="custom-link text-light "to={"/recuperar-password"}>
                         Enviar Correo
+                        </Link>
                     </button>
+                
                 </div>
 
                 <div className="text-center mt-2">

@@ -20,6 +20,7 @@ import { SendEmail } from "./component/send-email";
 import { RecuperarPassword } from "./component/recuperar-password";
 import { PaymentCash} from "./component/finalPaymentProcess";
 
+import ProtectedRoute from "./component/protectedRoute.js";
 
 
 
@@ -43,18 +44,19 @@ const Layout = () => {
                         <Route element={<Demo />} path="/demo" />
                         <Route element={<Register />} path="/register" />
                         <Route element={<Single />} path="/single/:theid" />
-                        <Route element={<PlaceReservations />} path="/reservations" />
-                        <Route element={<Menu />} path="/menu" />
-                        <Route element={<Admin/>} path="/admin" />
+                        <Route element={<ProtectedRoute><PlaceReservations /></ProtectedRoute>} path="/reservations" />
+                        <Route element={<ProtectedRoute><Menu /></ProtectedRoute>} path="/menu" />
+                        <Route element={<ProtectedRoute><Admin/></ProtectedRoute>} path="/admin" />
 
-                        <Route element={<Payment />} path="/payment" />
-                        <Route element={<Form />} path="/form" />                    
+                        <Route element={<ProtectedRoute><Payment /></ProtectedRoute>} path="/payment" />
+                        <Route element={<ProtectedRoute><Form /></ProtectedRoute>} path="/form" />                    
                
-                        <Route element={<NewMenu />} path="/newMenu" />
+                        <Route element={<ProtectedRoute><NewMenu /></ProtectedRoute>} path="/newMenu" />
                         <Route element={<RecuperarPassword />} path="/recuperar-password" />
                         <Route element={<SendEmail />} path="/send-email" />
-                        <Route element={<NewOption />} path="/newOptions" />
+                        {/* <Route element={<NewOption />} path="/newOptions" /> */}
                         <Route element={<PaymentCash />} path="/finalPaymentProcess" />
+                        <Route element={<ProtectedRoute><NewOption /></ProtectedRoute>} path="/newOptions" />
                         <Route element={<h1>Not found!</h1>} />
 
                     </Routes>
