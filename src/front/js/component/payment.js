@@ -6,8 +6,11 @@ import { initMercadoPago, Wallet } from '@mercadopago/sdk-react'
 import { Context } from "../store/appContext";
 import axios from 'axios';
 
+
 export const Payment = () => {
 
+    let total = 0
+     
     const { actions, store } = useContext(Context);
 
     const [orders, setOrders] = useState([]);
@@ -25,7 +28,7 @@ export const Payment = () => {
 
     const pagar = async () => {
         // const subtotal = 100; 
-        const initPoint = await actions.pagoMercadoPago(2024);
+        const initPoint = await actions.pagoMercadoPago(total);
         if (initPoint) {
             let url = store.mercadoPago.init_point
             window.location.href = url; // Redirige al cliente
@@ -74,6 +77,7 @@ export const Payment = () => {
                                         <div>
                                             {/* Mostrar el nombre del producto */}
                                             <strong>{order.menu_name}</strong><br />
+                                            {/* <small>Día: {order.menu_day}</small><br /> */}
                                             <small>Cantidad: {order.cantidad}</small>
                                         </div>
                                     </div>
@@ -95,6 +99,7 @@ export const Payment = () => {
                                     <span className="badge bg-success text-white">
                                         ${order.total_price}
                                     </span>
+                                   <span className="visually-hidden"> {total = total + parseInt(order.total_price)} </span>
                                 </div>
                             ))
                         ) : (
@@ -103,6 +108,8 @@ export const Payment = () => {
                             </div>
                         )}
                     </div>
+
+                    <p className="text-end">Total: ${total}</p>
 
                 </div>
 

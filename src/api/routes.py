@@ -254,20 +254,15 @@ def get_option():
 
 @api.route("/preference", methods=["POST"]) 
 def preference(): 
-    # body = json.loads(request.data)
-    # total = body["total"]
+    body = json.loads(request.data)
+    total = body["total"]
     # Crea un ítem en la preferencia
     preference_data = {
         "items": [
             {
-                "title": "Mi producto",
+                "title": "Anda Food",
                 "quantity": 1,
-                "unit_price": 75.76
-            },
-            {
-                "title": "Mi producto",
-                "quantity": 1,
-                "unit_price": 75.76
+                "unit_price": total
             }
         ],
         "payer": {
@@ -277,9 +272,6 @@ def preference():
             "success": f"{frontendurl}/menu", 
             "failure": f"{frontendurl}/menu", 
             "pending": f"{frontendurl}/menu",
-            "success": f"{frontendurl}/menuoptions", 
-            "failure": f"{frontendurl}/menuoptions", 
-            "pending": f"{frontendurl}/menuoptions"
 
             # que url es la que va aca . o implementar backendurl
         },
@@ -458,48 +450,6 @@ def delete_reservation_by_email():
 
 from flask_cors import cross_origin
 
-# @api.route("/ordenes", methods=["POST"])
-# @cross_origin(origins="*")
-# def create_order():
-#     try:
-#         data = request.get_json()
-
-#         user_id = data.get("user_id")
-#         menu_id = data.get("menu_id")
-#         cantidad = data.get("cantidad", 1)
-#         option_id = data.get("option_id")
-
-#         # Validate data
-#         if not user_id or not menu_id or not cantidad or not option_id:
-#             raise APIException("Missing required fields", status_code=400)
-
-#         user = User.query.get(user_id)
-#         menu = Menu.query.get(menu_id)
-#         menu_option = MenuOptions.query.get(option_id)
-
-#         if not user or not menu or not menu_option:
-#             raise APIException("Invalid user, menu, or option", status_code=404)
-
-#         # Create the new order
-#         nueva_orden = ListaDeOrdenes(
-#             user_id=user_id,
-#             menu_id=menu_id,
-#             cantidad=cantidad,
-#             option_id=option_id
-#         )
-
-#         db.session.add(nueva_orden)
-#         db.session.commit()
-
-#         return jsonify(nueva_orden.serialize()), 201
-
-#     except APIException as e:
-#         return jsonify({"error": e.message}), e.status_code
-#     except Exception as e:
-#         # Log the error for debugging
-#         print(f"Error creating order: {str(e)}")
-#         return jsonify({"error": "An error occurred while creating the order"}), 500
-
 
 @api.route("/ordenes", methods=["POST"])
 # @cross_origin(origins="*")
@@ -512,6 +462,7 @@ def create_order():
 
         user_id = data.get("user_id")
         menu_id = data.get("menu_id")
+        # menu_day = data.get("menu_day")
         cantidad = data.get("cantidad")
         option_id = data.get("option_id")
         total_price= data.get("total_price")
@@ -525,6 +476,7 @@ def create_order():
         nueva_orden = ListaDeOrdenes(
             user_id=user_id,
             menu_id=menu_id,
+            # menu_day=menu_day,
             cantidad=cantidad,
             option_id=option_id,
             total_price=total_price,

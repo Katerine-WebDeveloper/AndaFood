@@ -384,48 +384,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			  },
 			  
-
-			//   createListaDeOrden: async (orderData) => {
-			// 	try {
-			// 	  const response = await fetch(process.env.BACKEND_URL + "api/ordenes", {
-			// 		method: "POST",
-			// 		headers: {
-			// 		  "Content-Type": "application/json",
-			// 		  // Eliminar la verificación de autorización
-			// 		  // "Authorization": "Bearer " + localStorage.getItem("access_token")
-			// 		},
-			// 		  body: JSON.stringify(orderData), // Aquí se envía el cuerpo con los datos de la orden
-			// 	  });
-			// 	  console.log("URL de backend:", process.env.BACKEND_URL + "api/ordenes");
-			// 	  console.log("Datos de la orden enviados:", orderData);
-
-			  
-			// 	  if (!response.ok) {
-			// 		const errorText = await response.text(); // Obtener detalles del error
-			// 		console.error("Error en la respuesta:", errorText);
-			// 		throw new Error("Error al crear la orden");
-			// 	}				
-			  
-			// 	  const data = await response.json();
-			// 	  console.log("Orden creada:", data);
-			// 	  console.log("Estado de la respuesta:", response.status);
-			// 	  console.log("Encabezados de la respuesta:", response.headers);
-
-			  
-			// 	  // Actualizar el estado de la aplicación, por ejemplo, agregar la nueva orden a la lista
-			// 	  setStore(prevStore => ({
-			// 		...prevStore,
-			// 		listaDeOrdenes: [...prevStore.listaDeOrdenes, data]
-			// 	  }));
-			  
-			// 	  return true;
-			// 	} catch (error) {
-			// 	  console.error("Error al crear la orden:", error);
-			// 	  return false;
-				  
-			// 	}
-				
-			//   },
 			
 			createListaDeOrden: async (orders) => {
 				try {

@@ -63,9 +63,7 @@ export const MenuNavbar = (props) => {
       setSpinner(false);
     }
   };
-  
-  
-  
+
 
   const irAPayment = () => {
     navigate("/payment");

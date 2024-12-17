@@ -131,6 +131,7 @@ class ListaDeOrdenes(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
     menu_id = db.Column(db.Integer, db.ForeignKey("menu.id"), nullable=True)
+    # menu_day = db.Column(db.String, nullable=False)
     option_id = db.Column(db.Integer, db.ForeignKey("menu_options.id"), nullable=True)
     cantidad = db.Column(db.Integer, nullable=False, default=1)
     total_price = db.Column(db.String(20), nullable=False)
@@ -146,6 +147,7 @@ class ListaDeOrdenes(db.Model):
     def __init__(self, user_id, menu_id, cantidad, option_id, total_price, fecha_orden):
         self.user_id = user_id
         self.menu_id = menu_id
+        # self.menu_day = menu_day
         self.cantidad = cantidad
         self.option_id = option_id
         self.total_price = total_price
@@ -166,6 +168,7 @@ class ListaDeOrdenes(db.Model):
             "id": self.id,
             "user_id": self.user_id,
             "menu_id": self.menu_id,
+            # "menu_day": self.menu_day,
             "option_id": self.option_id,
             "cantidad": self.cantidad,
             "total_price": self.total_price,
