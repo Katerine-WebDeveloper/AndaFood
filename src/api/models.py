@@ -49,6 +49,7 @@ class Menu(db.Model):
     description = db.Column(db.String(255), nullable=True)
     img = db.Column(db.String(1000), nullable=False)
     price = db.Column(db.Float, nullable=False)
+    
 
     def __repr__(self):
         return f'<Menu {self.name}>'

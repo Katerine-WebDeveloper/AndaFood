@@ -79,6 +79,15 @@ footer {
     transform: scale(1.1);
 
 }
+.logout2{
+    background-color: grey;
+    color:rgb(255, 255, 255);
+    border-radius: 10px ;
+    border: none;
+    padding:6px;
+}
+
+
 
 /* link cuestionario */
 .custom-link {

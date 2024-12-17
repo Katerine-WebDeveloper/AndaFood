@@ -299,7 +299,7 @@ def preference():
             "email": "test_user_17805074@testuser.com"
         },
        "back_urls": { 
-            "success": f"{frontendurl}/menu", 
+            "success": f"{frontendurl}/finalPaymentProcess", 
             "failure": f"{frontendurl}/menu", 
             "pending": f"{frontendurl}/menu",
 
