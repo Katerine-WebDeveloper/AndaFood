@@ -9,7 +9,7 @@ class User(db.Model):
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(80), unique=False, nullable=False)
     is_active = db.Column(db.Boolean(), unique=False, nullable=False)
-    num_funcionario = db.Column(db.Integer, unique=True, nullable=False)
+    num_funcionario = db.Column(db.Integer, unique=False, nullable=False)
     is_admin = db.Column(db.Boolean(), nullable=True, default=False)
     reserva = db.relationship("Reserva", backref="user")
 
