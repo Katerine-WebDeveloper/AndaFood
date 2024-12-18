@@ -19,6 +19,7 @@ from flask_jwt_extended import JWTManager
 from flask_cors import CORS
 
 # Configurar CORS
+
 app = Flask(__name__)
 CORS(app, resources={r"/api/*": {"origins": os.getenv("FRONTEND_URL")}})
 
