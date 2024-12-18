@@ -20,7 +20,7 @@ from flask_cors import CORS
 
 # Configurar CORS
 app = Flask(__name__)
-CORS(app, resources={r"/api/*": {"origins": "https://turbo-space-guide-q7947jp45gr4fxxq4-3000.app.github.dev"}})
+CORS(app, resources={r"/api/*": {"origins": os.getenv("FRONTEND_URL")}})
 
 
 # from models import Person
