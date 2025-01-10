@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import andalogofood from "../../img/anda.png";
+import menu from "../../img/menu.webp";
 import userlogo from "../../img/user.webp";
 import "../../styles/shoppingCart.css";
 import { Context } from "../store/appContext";
@@ -62,14 +62,16 @@ export const Menu = () => {
   return (
     <SelectedMenuData.Provider value={{ selectedMenu, setSelectedMenu, listCart, setListCart }}>
       <SelectedOptionData.Provider value={{ selectedOption, setSelectedOption, listCart, setListCart }}>
-        <div className="container mt-3">
+        <div className="container">
 
           <MenuNavbar />
 
           <div className="mb-5">
-            <h2 className="text-center" style={{ color: "rgb(56, 101, 229)", padding: "20px" }}>
+           <div className="menusemanal align-content-center"  style={{ backgroundImage: `url(${menu})` }}>
+            <h2 className="text-center menusemanaltitle" style={{ color: "rgb(255, 255, 255)", padding: "10px"}}>
               <i className="fa-solid fa-calendar-days"></i> MENÚ SEMANAL
             </h2>
+           </div>
             {store.user?.is_admin && (
               <div className="text-end mb-3">
                 <button
@@ -92,19 +94,18 @@ export const Menu = () => {
               {["Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado"].map((day) => (
                 <div
                   key={day}
-                  className="menudeldia2 mt-3"
+                  className=" mt-1"
                   style={{
                     marginBottom: "20px",
                     fontFamily: "Mulish, sans-serif",
-                    backgroundColor: "rgba(56, 101, 229, 0.2)",
-                    padding: "20px",
+                    padding: "10px",
                     borderRadius: "10px",
                   }}
                 >
-                  <h2 className="text-center" style={{ color: "rgb(56, 101, 229)" }}>{day}</h2>
+                  <h2 className="text-center mb-2 menudeldia2" style={{ color: "rgb(255, 255, 255)" }}>{day}</h2>
                   <div className="row">
                     {store[`menu${day}`] && store[`menu${day}`].map((menu) => (
-                      <CardMenu key={menu.id} menu={menu} />
+                      <CardMenu key={menu.id} menu={menu}/>
                     ))}
                   </div>
                   </div>

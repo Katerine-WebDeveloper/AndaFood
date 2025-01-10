@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import emailjs from "emailjs-com"; // Importa EmailJS
 import "../../styles/home.css";
 import salonComedor from "../../img/salonComedor.png";
+import { Navbar } from "./loginnavbar";
 
 export const Form = () => {
   const navigate = useNavigate();
@@ -42,11 +43,15 @@ export const Form = () => {
   };
 
   return (
-    <div className="container p-5">
+    <>
+
+  <Navbar/>
+
+    <div className="container p-5 form">
       <h1 className="text-center">Tu opinión nos importa.</h1>
-      <div className="d-flex justify-content-center align-items-center">
+      <div className="d-flex flex-wrap justify-content-center align-items-center">
         <div>
-          <img src={salonComedor} alt="Salón comedor" />
+          <img className="imgform" src={salonComedor} alt="Salón comedor" />
         </div>
         <div className="form-container">
           <form id="contact-form" onSubmit={handleSubmit}>
@@ -102,5 +107,6 @@ export const Form = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };

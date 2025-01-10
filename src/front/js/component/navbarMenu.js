@@ -97,7 +97,7 @@ export const MenuNavbar = (props) => {
   
 
   return (
-    <nav className="navbar bg-body-tertiary">
+    <nav className="navbar navmenu">
 
       <div className="container-fluid d-flex justify-content-between align-items-center" >
 
@@ -160,18 +160,18 @@ export const MenuNavbar = (props) => {
 
         {/* El carrito de compras */}
 
-        <div className="shoppingCart d-flex">
 
+        <div className="shoppingCart d-flex">
 
           <div className="flex-direction-column">
 
             <Link to={"/reservations"} className="custom-link">
-              <button className="btn m-1 " type="button" style={{ backgroundColor: "rgb(56, 101, 229)", "color": "white" }}>
+              <button className="btn m-1 " type="button" style={{ backgroundColor: "rgb(255, 255, 255)", "color": "#3865e5" }}>
                 Reserva de lugar</button>
             </Link>
 
 
-            <button className="btn m-1 " type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasTwo" aria-controls="offcanvasTwo" style={{ "backgroundColor": "rgb(56, 101, 229)", "color": "white" }}>
+            <button className="btn m-1" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasTwo" aria-controls="offcanvasTwo" style={{ "backgroundColor": "rgb(255, 255, 255)", "color": "#3865e5", borderRadius:"60%"}}>
               <i className="fa-solid fa-cart-shopping"></i>
             </button>
           </div>
